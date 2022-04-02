@@ -1,0 +1,66 @@
+Version: '2.0.0-SNAPSHOT'
+#显示在提示
+Title: '§6✦§f'
+#显示在界面
+PluginName: '§f§l[§0Activity§f§l]'
+Help:
+  - '§e§m =                                             = '
+  - '§b/activity                          §f - 打开菜单'
+  - '§b/activity reload                §f - 重载配置'
+  - '§b/activity rank                   §f - 活跃排行'
+  - '§b/activity task                   §f - 任务列表'
+  - '§b/activity data [p]                §f - 任务列表'
+  - '§b/activity playtime               §f - 在线奖励'
+  - '§b/activity add [p] <a>           §f - 补签机会'
+  - '§b/activity quiz [q] [r] [o]       §f - 活跃抢答'
+  - '§b/activity task [p] [task]       §f - 活跃抢答'
+  - '§9其中§7p§9表示玩家，§7a§9表示数量，§7<>§9表示可选，§7[]§9表示必填'
+  - '§9其中§7q§9表示问题题目，§7r§9表示正确的选项(A,B,C,...)，§7o§9表示选项(至少两个)'
+  - '§e§m =                                             = '
+PlayerCommand: '§c该指令只能由玩家使用!'
+Reloading: '§f配置文件重载中...'
+Reloaded: '§f配置文件重载完成!'
+
+#菜单显示的日期 %month%是月 %day%是日
+DisplayDay: '§r%month%§e§l月§r%day%§e§l日'
+
+#提示信息
+FaultSignIn: '§6✦§f很遗憾没办法签到'
+SignInFestival: '§6✦§f祝你%festival%快乐!'
+PlaytimeRemind: '§6✦§f在线奖励可以领取快去看看吧'
+SignInRemind: '§6✦§f今天还没签到呢，快点签到领取奖品吧'
+SignInFuture: '§6✦§f这天还没到呢，你想穿越去签到吗'
+SignInSuccess: '§6✦§f成功签到，奖品已放入背包'
+SignInWeekend: '§6✦§f祝您周末愉快'
+UnluckToday: '§6✦§f今天的运气差极了'
+SignInAlready: '§6✦§f你已经签到过了'
+NotEnoughChance: '§6✦§f补签次数已经用完了呢'
+NotEnoughActivity: '§6✦§f你没有足够的活跃度'
+NotEnoughSignin: '§6✦§f你没有足够的签到次数'
+NotEnoughPlaytime: '§6✦§f你没有足够的在线时间'
+ExchangeSuccess: '§6✦§f成功领取奖励'
+RewardTask: '§6✦§f恭喜你成功完成任务 §3%task%，§f并获得活跃积分 §3%amount%'
+AddChance: '§6✦§f成功为§b %player% §f添加 §3%amount% §f次补签机会'
+FinishTask: '§6✦§f你已完成§3 %task% §f快点领取奖励吧!'
+AddTask: '§6✦§f你接受了任务 §3 %task%'
+ActivityRank: '§6✦§f今日活跃度排行'
+SignInRewardLimit: '§6✦§f你这个月已经领取过这个奖励了'
+DayActivity: '§6✦§f玩家§3%player%§f该月在线 §3%days% §f天，共 §3%activity% §f活跃度'
+SelectOption: '§6✦§f玩家§3%player%§f选择了选项 §3%option%'
+RightOption: '§6✦§f你选择了正确的答案'
+FalseOption: '§6✦§f很遗憾你选错了'
+Selected: '§6✦§f你已经回答过这个问题了'
+WinPlayer: '§6✦§f玩家§3%player%§f抢答正确，获得活跃度 §3%activity%'
+
+#提示按钮
+ButtonSignIn: '点击签到'
+ButtonPlaytime: '在线奖励'
+ButtonTask: '活跃任务'
+
+#菜单名称
+MainGui: '§9签到界面'
+ActivityGui: '§9活跃礼包'
+SignInGui: '§9签到奖励'
+PlaytimeGui: '§9在线奖励'
+TaskGui: '§9任务列表'
+
