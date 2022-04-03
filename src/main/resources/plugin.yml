@@ -25,6 +25,9 @@ commands:
     description: 奖励
     usage: /reward [add|remove] [name]
     permission: op
+  quiz:
+    description: 问答
+    usage: /quiz [quiz] [rightOption] [option]...
 
 permissions:
   activity.give:

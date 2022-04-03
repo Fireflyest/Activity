@@ -63,6 +63,12 @@ public class SignCommand implements CommandExecutor {
                     return;
                 }
 
+                Day day = ActivityManager.getDay(playerName, TimeUtils.getMonth(), dayV);
+                if(day.isSign()){
+                    sender.sendMessage(Language.SIGN_IN_ALREADY);
+                    return;
+                }
+
                 // 玩家数据
                 User user = ActivityManager.getUser(playerName);
                 if(dayV == today){ // 是否当天
@@ -98,7 +104,6 @@ public class SignCommand implements CommandExecutor {
 
                 sender.sendMessage(Language.SIGN_IN_SUCCESS);
                 // 天数据
-                Day day = ActivityManager.getDay(playerName, TimeUtils.getMonth(), dayV);
                 day.setSign(true);
                 data.update(day);
                 // 奖励

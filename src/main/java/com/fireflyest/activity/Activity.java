@@ -98,6 +98,11 @@ public class Activity extends JavaPlugin {
         if(playtimeCommand!=null){
             playtimeCommand.setExecutor(new PlaytimeCommand());
         }
+        PluginCommand quizCommand = this.getCommand("quiz");
+        if(quizCommand!=null){
+            quizCommand.setExecutor(new QuizCommand());
+            quizCommand.setTabCompleter(new QuizTab());
+        }
 
         ActivityManager.initActivityManager();
         for (Player player : Bukkit.getOnlinePlayers()) {

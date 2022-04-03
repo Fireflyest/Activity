@@ -55,6 +55,17 @@ public class ChatUtils {
         );
     }
 
+    @SuppressWarnings("deprecation")
+    public static void sendQuizOption(Player player, char option, String text){
+        player.spigot().sendMessage(new ComponentBuilder(LEFT)
+                .event(new HoverEvent( HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("点击选择").create()))
+                .event(new ClickEvent( ClickEvent.Action.RUN_COMMAND, "/quiz "+option))
+                .append(option+"").color(ChatColor.DARK_AQUA)
+                .append(RIGHT).color(ChatColor.WHITE)
+                .append(text)
+                .create());
+    }
+
     private static String n2l(int n){
         switch (n){
             case 1:
