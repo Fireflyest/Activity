@@ -82,11 +82,17 @@ public class ActivityManager {
         user.setPlaytime(user.getPlaytime() + getOnlineTime(playerName));
         day.setPlaytime(day.getPlaytime() + getOnlineTime(playerName));
         data.update(user);
+        data.update(day);
         joinTime.remove(playerName);
     }
 
     public static long getOnlineTime(String playerName){
         return TimeUtils.getDate() - joinTime.get(playerName);
+    }
+
+    public static long getTodayOnlineTime(String playerName){
+        Day day = getDay(playerName);
+        return day.getPlaytime() + TimeUtils.getDate() - joinTime.get(playerName);
     }
 
     public static Reward getReward(int id){

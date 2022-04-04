@@ -75,6 +75,9 @@ public class ActivityCommand implements CommandExecutor {
             case "return":
                 guide.openView(player, Activity.MAIN_VIEW, sender.getName());
                 break;
+            case "rank":
+                // TODO: 2022/4/4
+                break;
             default:
         }
     }

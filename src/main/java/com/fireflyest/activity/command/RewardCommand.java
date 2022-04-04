@@ -116,7 +116,8 @@ public class RewardCommand implements CommandExecutor {
                     case "set":
                         int id = ConvertUtils.parseInt(finalVar3);
                         RewardManager.addReward(var2, id);
-                         break;
+                        sender.sendMessage(Language.TITLE+"奖品§3ID§7: §3" + id + "§f添加到§3" + var2);
+                        break;
                     case "add":
                         ItemStack item = player.getInventory().getItemInMainHand();
                         if (item.getType() == Material.AIR) {

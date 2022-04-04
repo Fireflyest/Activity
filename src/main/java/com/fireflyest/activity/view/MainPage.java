@@ -168,7 +168,8 @@ public class MainPage implements ViewPage {
         itemMap.put(17, tasks);
 
         ItemStack playtime = ActivityItem.PLAYTIME.clone();
-        ItemUtils.addItemData(playtime, "在线时长", TimeUtils.convertTime(ActivityManager.getOnlineTime(target)));
+        ItemUtils.addItemData(playtime, "持续在线", TimeUtils.convertTime(ActivityManager.getOnlineTime(target)));
+        ItemUtils.addItemData(playtime, "今日在线", TimeUtils.convertTime(ActivityManager.getTodayOnlineTime(target)));
         ItemUtils.addItemData(playtime, "总在线", TimeUtils.convertTime(user.getPlaytime()+ActivityManager.getOnlineTime(target)));
         if(ActivityManager.hasTenMinuteReward(target)) {
             ItemUtils.addLore(playtime, "§f点击领取在线十分钟奖励");
