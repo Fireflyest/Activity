@@ -40,7 +40,7 @@ RewardTask: '§6✦§f恭喜你成功完成任务 §3%task%，§f并获得活跃
 AddChance: '§6✦§f成功为§b %player% §f添加 §3%amount% §f次补签机会'
 FinishTask: '§6✦§f你已完成§3 %task% §f快点领取奖励吧!'
 AddTask: '§6✦§f你接受了任务 §3 %task%'
-ActivityRank: '§6✦§f今日活跃度排行'
+ActivityRank: '§6✦§f玩家活跃度排行(只显示前10)'
 SignInRewardLimit: '§6✦§f你这个月已经领取过这个奖励了'
 DayActivity: '§6✦§f玩家§3%player%§f该月在线 §3%days% §f天，共 §3%activity% §f活跃度'
 SelectOption: '§6✦§f玩家§3%player%§f选择了选项 §3%option%'

@@ -32,6 +32,11 @@ public class TaskCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String label, String[] args) {
         if(!cmd.getName().equalsIgnoreCase("task")) return true;
 
+        if(!sender.hasPermission("activity.task")){
+            sender.sendMessage(Language.TITLE + String.format("你没有权限§3%s§f来使用该指令", "activity.task"));
+            return true;
+        }
+
         switch (args.length){
             case 1:
                 this.executeCommand(sender, args[0]);
@@ -64,6 +69,7 @@ public class TaskCommand implements CommandExecutor {
                 sender.sendMessage(Language.TITLE+"未输入活动名称");
                 break;
             case "desc":
+            case "command":
             case "remove":
                 sender.sendMessage(Language.TITLE+"未输入活动ID");
                 break;
@@ -86,7 +92,9 @@ public class TaskCommand implements CommandExecutor {
                 new BukkitRunnable(){
                     @Override
                     public void run() {
-                        data.delete(Task.class, "name", var2);
+                        Task removeTask = data.queryOne(Task.class, "id", var2);
+                        sender.sendMessage(Language.TITLE+"删除活动§7：§3" + removeTask.getName());
+                        data.delete(removeTask);
                     }
                 }.runTaskAsynchronously(Activity.getInstance());
                 break;
@@ -108,7 +116,7 @@ public class TaskCommand implements CommandExecutor {
                     case "add":
                         ItemStack item = player.getInventory().getItemInMainHand();
                         if (item.getType() == Material.AIR) {
-                            item = new ItemStack(Material.CHEST);
+                            item = new ItemStack(Material.BOOK);
                         }
                         long deadline = var3 == null ? 0 : ((long) ConvertUtils.parseInt(var3) *1000*60*60) + TimeUtils.getDate();
                         Task task = new Task(var2, deadline);
@@ -117,10 +125,17 @@ public class TaskCommand implements CommandExecutor {
                         long insertId = data.insert(task);
                         sender.sendMessage(Language.TITLE+"成功新建活动§3ID§7：§3" + insertId + "§f，输入§3/task desc [ID] [简介] §f来设置展示的简介");
                         break;
-                    case "remove":
-                        Task removeTask = data.queryOne(Task.class, "id", var3);
-                        sender.sendMessage(Language.TITLE+"删除活动§7：§3" + removeTask.getName());
-                        data.delete(removeTask);
+                    case "desc":
+                        Task descTask = data.queryOne(Task.class, "id", var2);
+                        descTask.setDesc(var3);
+                        data.update(descTask);
+                        sender.sendMessage(Language.TITLE+ String.format("活动§3%s§f的简介成功修改", descTask.getName()));
+                        break;
+                    case "command":
+                        Task commandTask = data.queryOne(Task.class, "id", var2);
+                        commandTask.setCommand(var3.replace("_", " "));
+                        data.update(commandTask);
+                        sender.sendMessage(Language.TITLE+ String.format("活动§3%s§f的指令成功修改", commandTask.getName()));
                         break;
                     default:
                         sender.sendMessage(Language.TITLE+"指令参数错误");

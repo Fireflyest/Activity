@@ -42,6 +42,8 @@ public class RewardTab implements TabCompleter {
             }else if(args.length == 3){
                 if("set".equalsIgnoreCase(args[0])){
                     tab.add("[id]");
+                }else if("add".equalsIgnoreCase(args[0])){
+                    tab.add("<指令>");
                 }
             }
             return tab;

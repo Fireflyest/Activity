@@ -23,6 +23,7 @@ public class ActivityItem {
     public static ItemStack FESTIVAL;
 
     public static ItemStack ACTIVITY;
+    public static ItemStack ACTIVITY_SKULL;
     public static ItemStack SIGN;
     public static ItemStack PLAYTIME;
     public static ItemStack TASKS;
@@ -82,6 +83,7 @@ public class ActivityItem {
         FESTIVAL = ItemUtils.createItem(XMaterial.MAP.parseMaterial(), null, null);
 
         ACTIVITY = ItemUtils.createItem(XMaterial.BEACON.parseMaterial(), "§e§l活跃奖励", "/activity rewards");
+        ACTIVITY_SKULL = ItemUtils.createItem(XMaterial.PLAYER_HEAD.parseMaterial(), "§e§l活跃奖励", "/activity rewards");
 
         TASKS = ItemUtils.createItem(XMaterial.BOOKSHELF.parseMaterial(), "§e§l活动列表", "/activity task");
 

@@ -27,12 +27,16 @@ public class TaskTab implements TabCompleter {
             }else if(args.length == 2){
                 if("add".equalsIgnoreCase(args[0])){
                     tab.add("[名称]");
-                }else if("remove".equalsIgnoreCase(args[0])){
+                }else if("remove".equalsIgnoreCase(args[0]) || "desc".equalsIgnoreCase(args[0])  || "command".equalsIgnoreCase(args[0]) ){
                     tab.add("[ID]");
                 }
             }else if(args.length == 3){
                 if("add".equalsIgnoreCase(args[0])){
                     tab.add("[剩余小时]");
+                }else if("desc".equalsIgnoreCase(args[0])){
+                    tab.add("[简介]");
+                }else if("command".equalsIgnoreCase(args[0])){
+                    tab.add("[指令]");
                 }
             }
             return tab;

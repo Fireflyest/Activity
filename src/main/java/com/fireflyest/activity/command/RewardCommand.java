@@ -30,6 +30,11 @@ public class RewardCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String label, String[] args) {
         if(!cmd.getName().equalsIgnoreCase("reward")) return true;
 
+        if(!sender.hasPermission("activity.reward")){
+            sender.sendMessage(Language.TITLE + String.format("你没有权限§3%s§f来使用该指令", "activity.reward"));
+            return true;
+        }
+
         switch (args.length){
             case 1:
                 this.executeCommand(sender, args[0]);
@@ -89,7 +94,9 @@ public class RewardCommand implements CommandExecutor {
                 new BukkitRunnable(){
                     @Override
                     public void run() {
-                        data.delete(Reward.class, "name", var2);
+                        Reward removeReward = data.queryOne(Reward.class, "id", var2);
+                        sender.sendMessage(Language.TITLE+"删除奖品§7：§3" + removeReward.getName());
+                        data.delete(removeReward);
                     }
                 }.runTaskAsynchronously(Activity.getInstance());
                 break;
@@ -128,11 +135,6 @@ public class RewardCommand implements CommandExecutor {
                         reward.setMeta(SerializeUtil.serializeItemMeta(item));
                         long insertId = data.insert(reward);
                         sender.sendMessage(Language.TITLE+"奖品为§3ID§7: §3" + insertId + "§f，输入§3/reward set [类型] [ID]§f将奖品设置为某类型奖励");
-                        break;
-                    case "remove":
-                        Reward removeReward = data.queryOne(Reward.class, "id", finalVar3);
-                        sender.sendMessage(Language.TITLE+"删除奖品§7：§3" + removeReward.getName() + "，§fID§7：§3" + finalVar3);
-                        data.delete(removeReward);
                         break;
                     default:
                         sender.sendMessage(Language.TITLE+"指令参数错误");

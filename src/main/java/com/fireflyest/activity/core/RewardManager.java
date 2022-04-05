@@ -31,6 +31,7 @@ public class RewardManager {
     public static final int TEN_MINUTE = 4;
     public static final int TWO_HOURS = 5;
     public static final int SIX_HOURS = 6;
+    public static final int QUIZ = 7;
 
     private static final Sound rewardSound = XSound.ENTITY_PLAYER_LEVELUP.parseSound();
 
@@ -64,6 +65,9 @@ public class RewardManager {
                 break;
             case SIX_HOURS:
                 rewards = config.getIntegerList("SixHoursRewards");
+                break;
+            case QUIZ:
+                rewards = config.getIntegerList("QuizRewards");
                 break;
             default:
         }

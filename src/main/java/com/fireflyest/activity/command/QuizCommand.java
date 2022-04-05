@@ -51,8 +51,8 @@ public class QuizCommand implements CommandExecutor {
             sender.sendMessage(Language.PLAYER_COMMAND);
             return;
         }
-        if(!player.isOp()){
-            sender.sendMessage(Language.TITLE + "你没有发起抢答的权限！");
+        if(!sender.hasPermission("activity.quiz")){
+            sender.sendMessage(Language.TITLE + String.format("你没有权限§3%s§f来使用该指令", "activity.quiz"));
             return;
         }
 

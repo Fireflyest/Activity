@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author Fireflyest
@@ -126,6 +127,10 @@ public class MainPage implements ViewPage {
                     }
                 }
             }
+            // 展示天数(一些节日物品可能无法正常显示，例如鸡蛋最多叠16个)
+            if(Config.DISPLAY_ITEM_NUMBER){
+                item.setAmount(d);
+            }
             // 点击指令 只有本月可以签到
             if(thisMonth == month){
                 ItemUtils.setItemValue(item, "/sign " + d);
@@ -157,8 +162,14 @@ public class MainPage implements ViewPage {
 
         // 侧边导航
         User user = ActivityManager.getUser(target);
-
-        ItemStack activity = ActivityItem.ACTIVITY.clone();
+        ItemStack activity;
+        if(Config.DISPLAY_SKIN){
+            activity = ItemUtils.createSkull(
+                    ActivityItem.ACTIVITY_SKULL.clone(),
+                    Bukkit.getOfflinePlayer(UUID.fromString(user.getUuid())));
+        }else {
+            activity = ActivityItem.ACTIVITY.clone();
+        }
         ItemUtils.addItemData(activity, "活跃值", user.getActivity());
         ItemUtils.addLore(activity, "§f点击查看礼包");
         itemMap.put(8, activity);

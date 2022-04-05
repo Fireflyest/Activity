@@ -17,21 +17,35 @@ commands:
   playtime:
     description: 在线时长
     usage: /playtime
-  task:
-    description: 任务
-    usage: /task [add|remove] [name] <deadline>
-    permission: op
+  quiz:
+    description: 问答
+    usage: /quiz [quiz] [rightOption] [option]...
   reward:
     description: 奖励
     usage: /reward [add|remove] [name]
     permission: op
-  quiz:
-    description: 问答
-    usage: /quiz [quiz] [rightOption] [option]...
-
+  task:
+    description: 活动
+    usage: /task [add|remove] [name] <deadline>
+    permission: op
 permissions:
-  activity.give:
-    description: 给予补签次数
+  activity.chance:
+    description: 给予补签机会
+    default: op
+  activity.add:
+    description: 给予活跃度
+    default: op
+  activity.rank:
+    description: 查看排行榜
+    default: op
+  activity.quiz:
+    description: 发起抢答
+    default: op
+  activity.reward:
+    description: 奖励
+    default: op
+  activity.task:
+    description: 活动
     default: op
   activity.create:
     description: 创建牌子

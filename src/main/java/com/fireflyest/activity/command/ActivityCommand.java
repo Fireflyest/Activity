@@ -12,7 +12,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class ActivityCommand implements CommandExecutor {
 
@@ -76,7 +81,27 @@ public class ActivityCommand implements CommandExecutor {
                 guide.openView(player, Activity.MAIN_VIEW, sender.getName());
                 break;
             case "rank":
-                // TODO: 2022/4/4
+                if(!sender.hasPermission("activity.rank")){
+                    sender.sendMessage(Language.TITLE + String.format("你没有权限§3%s§f来使用该指令", "activity.rank"));
+                    return;
+                }
+                new BukkitRunnable(){
+                    @Override
+                    public void run() {
+                        List<User> ranks = data.query(User.class);
+                        ranks.sort((u1, u2) -> {
+                            if(u1.getActivity() == u2.getActivity()) return 0;
+                            return u1.getActivity() > u2.getActivity() ? 1 : -1;
+                        });
+                        sender.sendMessage(Language.ACTIVITY_RANK);
+                        int i = 1;
+                        for (User rank : ranks) {
+                            sender.sendMessage(String.format("§3%s§7. %s      §3%s", i, rank.getName(), rank.getActivity()));
+                            i++;
+                            if(i > 10) break;
+                        }
+                    }
+                }.runTaskAsynchronously(Activity.getInstance());
                 break;
             default:
         }
@@ -96,10 +121,18 @@ public class ActivityCommand implements CommandExecutor {
         User user = ActivityManager.getUser(var2);
         switch (var1){
             case "chance":
+                if(!sender.hasPermission("activity.chance")){
+                    sender.sendMessage(Language.TITLE + String.format("你没有权限§3%s§f来使用该指令", "activity.chance"));
+                    return;
+                }
                 user.setChance(user.getChance() + num);
                 sender.sendMessage(Language.TITLE + "已为玩家§3" + var2 + "§f添加§3"+ num +"§f补签机会");
                 break;
             case "add":
+                if(!sender.hasPermission("activity.add")){
+                    sender.sendMessage(Language.TITLE + String.format("你没有权限§3%s§f来使用该指令", "activity.chance"));
+                    return;
+                }
                 user.setActivity(user.getActivity() + num);
                 sender.sendMessage(Language.TITLE + "已为玩家§3" + var2 + "§f添加§3" + num + "§f活跃值");
                 break;

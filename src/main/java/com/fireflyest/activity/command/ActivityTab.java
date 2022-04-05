@@ -19,7 +19,6 @@ public class ActivityTab implements TabCompleter {
         list.add("rank");
         list.add("task");
         list.add("sign");
-        list.add("quiz");
     }
 
     public List<String> onTabComplete(@NotNull CommandSender sender, Command command, @NotNull String alias, String[] args){

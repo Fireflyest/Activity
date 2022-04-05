@@ -47,6 +47,8 @@ public class QuizManager {
                     User user = ActivityManager.getUser(playerName);
                     user.setActivity(user.getActivity() +Config.QUIZ_ACTIVITY);
                     Activity.getData().update(user);
+                    // 抢答奖励
+                    RewardManager.giveReward(Bukkit.getPlayer(playerName), RewardManager.QUIZ);
                 }
 
                 cancel();
