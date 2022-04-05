@@ -13,12 +13,6 @@ DisplayItemNumber: false
 #默认的补签次数，每个月会送的数量
 DefaultChance: 2
 
-#周末签到的物品类型
-WeekendItem: MAP
-
-#任务进度条
-TaskProgress: true
-
 #活跃答题奖励积分
 QuizActivity: 1
 

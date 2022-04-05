@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.List;
@@ -79,6 +80,10 @@ public class RewardManager {
         int index = random.nextInt(rewards.size());
         int id = rewards.get(index);
         Reward reward = ActivityManager.getReward(id);
+        if (reward == null) {
+            player.sendMessage(Language.TITLE + "奖励错误null");
+            return;
+        }
         // 判断是指令还是物品
         if(reward.getCommand() != null && !"".equals(reward.getCommand())){
             String command = reward.getCommand().replace("%player%", player.getName());

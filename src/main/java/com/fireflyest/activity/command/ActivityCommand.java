@@ -6,6 +6,7 @@ import com.fireflyest.activity.core.ActivityManager;
 import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.data.Language;
 import com.fireflyest.activity.util.ConvertUtils;
+import com.fireflyest.activity.util.YamlUtils;
 import com.fireflyest.activity.view.RewardView;
 import com.fireflyest.gui.api.ViewGuide;
 import org.bukkit.command.Command;
@@ -15,8 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ActivityCommand implements CommandExecutor {
@@ -66,6 +65,12 @@ public class ActivityCommand implements CommandExecutor {
         }
         String playerName = player.getName();
         switch (var1){
+            case "reload":
+                if(!sender.isOp())return;
+                sender.sendMessage(Language.RELOADING);
+                YamlUtils.loadConfig();
+                sender.sendMessage(Language.RELOADED);
+                break;
             case "rewards":
                 guide.openView(player, Activity.REWARD_VIEW, RewardView.NORMAL);
                 break;
