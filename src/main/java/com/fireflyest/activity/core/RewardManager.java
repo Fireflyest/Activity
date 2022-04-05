@@ -85,7 +85,7 @@ public class RewardManager {
             return;
         }
         // 判断是指令还是物品
-        if(reward.getCommand() != null && !"".equals(reward.getCommand())){
+        if(reward.getCommand() != null && !"null".equals(reward.getCommand()) && !"".equals(reward.getCommand())){
             String command = reward.getCommand().replace("%player%", player.getName());
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
         }else {

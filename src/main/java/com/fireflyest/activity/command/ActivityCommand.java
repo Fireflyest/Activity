@@ -3,6 +3,7 @@ package com.fireflyest.activity.command;
 import com.fireflyest.activity.Activity;
 import com.fireflyest.activity.bean.User;
 import com.fireflyest.activity.core.ActivityManager;
+import com.fireflyest.activity.core.RewardManager;
 import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.data.Language;
 import com.fireflyest.activity.util.ConvertUtils;
@@ -81,6 +82,10 @@ public class ActivityCommand implements CommandExecutor {
                 break;
             case "close":
                 player.closeInventory();
+                break;
+            case "test":
+                if(!sender.isOp()) return;
+                RewardManager.giveReward(player, RewardManager.SIGN);
                 break;
             case "return":
                 guide.openView(player, Activity.MAIN_VIEW, sender.getName());
