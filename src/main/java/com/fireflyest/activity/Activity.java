@@ -17,7 +17,6 @@ import com.fireflyest.activity.util.YamlUtils;
 import com.fireflyest.activity.view.MainView;
 import com.fireflyest.activity.view.RewardView;
 import com.fireflyest.activity.view.TaskView;
-import com.fireflyest.gui.api.ViewGuide;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -25,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.fireflyest.craftgui.api.ViewGuide;
 
 import java.sql.SQLException;
 
@@ -35,9 +35,9 @@ import java.sql.SQLException;
 
 public class Activity extends JavaPlugin {
 
-    public static JavaPlugin getInstance() { return plugin; }
+    public static Activity getInstance() { return plugin; }
 
-    private static JavaPlugin plugin;
+    private static Activity plugin;
 
     public static final String MAIN_VIEW = "activity.main";
     public static final String REWARD_VIEW = "activity.reward";
@@ -56,6 +56,7 @@ public class Activity extends JavaPlugin {
         return storage;
     }
     public static Economy getEconomy() {
+        if (economy == null) setupEconomy();
         return economy;
     }
     public static ViewGuide getGuide() {
@@ -67,8 +68,8 @@ public class Activity extends JavaPlugin {
         plugin = this;
 
         this.setupData();
-        this.setupEconomy();
         this.setupGuide();
+        setupEconomy();
 
         // 注册事件
         this.getServer().getPluginManager().registerEvents( new PlayerEventListener(), this);
@@ -142,7 +143,7 @@ public class Activity extends JavaPlugin {
         YamlUtils.iniYamlUtils(plugin);
 
         if(Config.SQL){
-            if(Config.DEBUG) Bukkit.getLogger().info("使用数据库存储");
+            if(Config.DEBUG) plugin.getLogger().info("using database");
             // 数据库访问对象
             try {
                 storage = new SqlStorage(Config.URL, Config.USER, Config.PASSWORD);
@@ -151,7 +152,7 @@ public class Activity extends JavaPlugin {
                 e.printStackTrace();
             }
         }else{
-            if(Config.DEBUG) Bukkit.getLogger().info("使用本地存储");
+            if(Config.DEBUG) plugin.getLogger().info("using sqlite");
             // 本地数据库访问对象
             String url = "jdbc:sqlite:" + getDataFolder() + "/storage.db";
 
@@ -174,7 +175,7 @@ public class Activity extends JavaPlugin {
     /**
      * 经济插件
      */
-    private void setupEconomy() {
+    private static void setupEconomy() {
         if (Bukkit.getServer().getPluginManager().getPlugin("Vault") == null) {
             return;
         }
@@ -190,9 +191,6 @@ public class Activity extends JavaPlugin {
      * 界面初始化
      */
     private void setupGuide() {
-        if (Bukkit.getServer().getPluginManager().getPlugin("Gui") == null) {
-            return;
-        }
         RegisteredServiceProvider<ViewGuide> rsp = Bukkit.getServer().getServicesManager().getRegistration(ViewGuide.class);
         if (rsp == null) {
             Bukkit.getLogger().warning("Gui not found!");

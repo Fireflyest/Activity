@@ -1,4 +1,4 @@
-Version: '2.0.0-SNAPSHOT'
+Version: '${project.version}'
 #显示在提示
 Title: '§6✦§f'
 #显示在界面

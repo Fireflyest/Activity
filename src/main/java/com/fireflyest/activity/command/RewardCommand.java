@@ -6,8 +6,6 @@ import com.fireflyest.activity.core.RewardManager;
 import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.data.Language;
 import com.fireflyest.activity.util.ConvertUtils;
-import com.fireflyest.activity.util.SerializeUtil;
-import com.fireflyest.gui.api.ViewGuide;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,6 +13,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.fireflyest.craftgui.api.ViewGuide;
+import org.fireflyest.craftgui.util.SerializeUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class RewardCommand implements CommandExecutor {
@@ -30,8 +30,8 @@ public class RewardCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String label, String[] args) {
         if(!cmd.getName().equalsIgnoreCase("reward")) return true;
 
-        if(!sender.hasPermission("activity.reward")){
-            sender.sendMessage(Language.TITLE + String.format("你没有权限§3%s§f来使用该指令", "activity.reward"));
+        if(!sender.hasPermission("activity.admin")){
+            sender.sendMessage(Language.TITLE + String.format("你没有权限§3%s§f来使用该指令", "activity.admin"));
             return true;
         }
 
@@ -88,13 +88,14 @@ public class RewardCommand implements CommandExecutor {
                 sender.sendMessage(Language.TITLE + "未输入奖品id");
                 break;
             case "add":
-                executeCommand(sender, var1, var2, null);
+                executeCommand(sender, var1, var2, "");
                 break;
             case "remove":
                 new BukkitRunnable(){
                     @Override
                     public void run() {
                         Reward removeReward = data.queryOne(Reward.class, "id", var2);
+                        if (removeReward == null) return;
                         sender.sendMessage(Language.TITLE+"删除奖品§7：§3" + removeReward.getName());
                         data.delete(removeReward);
                     }

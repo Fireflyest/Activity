@@ -1,15 +1,17 @@
 main: com.fireflyest.activity.Activity
 name: Activity
-version: 1.0-SNAPSHOT
+prefix: Activity
+version: '${project.version}'
 description: 活跃度插件，作者QQ746969484(备注来意)
 api-version: 1.13
 authors: [Fireflyest]
 website: https://www.mcbbs.net/thread-906368-1-1.html
-depend: [Vault,Gui]
+depend: [Vault,CraftGUI]
 
 commands:
   activity:
     description: 打开界面
+    aliases: [act]
     usage: /activity <help>
   sign:
     description: 签到
@@ -29,23 +31,14 @@ commands:
     usage: /task [add|remove] [name] <deadline>
     permission: op
 permissions:
-  activity.chance:
+  activity.admin:
     description: 给予补签机会
-    default: op
-  activity.add:
-    description: 给予活跃度
     default: op
   activity.rank:
     description: 查看排行榜
     default: op
   activity.quiz:
     description: 发起抢答
-    default: op
-  activity.reward:
-    description: 奖励
-    default: op
-  activity.task:
-    description: 活动
     default: op
   activity.create:
     description: 创建牌子

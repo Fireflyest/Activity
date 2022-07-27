@@ -3,25 +3,26 @@ package com.fireflyest.activity.view;
 import com.fireflyest.activity.Activity;
 import com.fireflyest.activity.bean.Day;
 import com.fireflyest.activity.bean.User;
-import com.fireflyest.activity.core.ActivityItem;
+import com.fireflyest.activity.core.ActivityButton;
 import com.fireflyest.activity.core.ActivityManager;
-import com.fireflyest.activity.core.XCalendar;
+import com.fireflyest.activity.core.ActivityCalendar;
 import com.fireflyest.activity.data.Config;
 import com.fireflyest.activity.data.Storage;
-import com.fireflyest.activity.util.ItemUtils;
 import com.fireflyest.activity.util.MysqlExecuteUtils;
 import com.fireflyest.activity.util.SqliteExecuteUtils;
 import com.fireflyest.activity.util.TimeUtils;
-import com.fireflyest.gui.api.ViewPage;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.fireflyest.craftgui.api.ViewPage;
+import org.fireflyest.craftgui.util.ItemUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author Fireflyest
@@ -30,13 +31,9 @@ import java.util.UUID;
 
 public class MainPage implements ViewPage {
 
-    public static final String FUTURE = "§f§l[§2§l待签§f§l]";
-    public static final String TODAY = "§f§l[§a§l签到§f§l]";
-    public static final String SIGNED = "§f§l[§e§l已签§f§l]";
-    public static final String MISS = "§f§l[§c§l漏签§f§l]";
-
     private final Map<Integer, ItemStack> itemMap = new HashMap<>();
-    private final XCalendar calendar = new XCalendar();
+    private final Map<Integer, ItemStack> crashMap = new HashMap<>();
+    private final ActivityCalendar calendar = new ActivityCalendar();
 
     private final Inventory inventory;
     private final String title;
@@ -68,7 +65,7 @@ public class MainPage implements ViewPage {
     }
 
     @Override
-    public Map<Integer, ItemStack> getItemMap(){
+    public @NotNull Map<Integer, ItemStack> getItemMap(){
         // 数据库查询指令
         int today = TimeUtils.getDay();
         String condition = String.format(" where owner='%s' and month=%s", target, month);
@@ -79,7 +76,9 @@ public class MainPage implements ViewPage {
             sql = SqliteExecuteUtils.query(Day.class, condition);
         }
 
-        Map<Integer, ItemStack> itemStackMap = new HashMap<>(itemMap);
+        crashMap.clear();
+        crashMap.putAll(itemMap);
+
         // 将每天按数字放
         List<Day> days = storage.inquiryList(sql, Day.class);
         Map<Integer, Day> dayMap = new HashMap<>();
@@ -92,62 +91,40 @@ public class MainPage implements ViewPage {
             int d = i+1;
             // 获取当天数据
             Day iDay = dayMap.getOrDefault(d, new Day(target, month, d));
-            XCalendar.XDay xDay = null;
+            ActivityCalendar.Day xDay = null;
             try {
                 xDay = calendar.getXDay(year, month, d);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             // 获取物品位置
-            int index = k*9 + j;
-            j++;
+            int index = k*9 + j++;
             if(j%9 == 7) {
                 j = 0;
                 k++;
             }
             ItemStack item;
             int thisMonth = TimeUtils.getMonth();
-
             if(iDay.isSign()){
-                // 已签
-                item = ActivityItem.SIGNED.clone();
-                ItemUtils.setDisplayName(item, SIGNED);
+                item = ActivityButton.SIGNED.clone(); // 已签
             }else {
                 if(thisMonth == month && d == today){
-                    // 当天
-                    item = ActivityItem.TODAY.clone();
-                    ItemUtils.setDisplayName(item, TODAY);
+                    item = ActivityButton.TODAY.clone(); // 当天
                 }else{
-                    // 未签
-                    item = ActivityItem.getNotSignItem(xDay);
-                    if((thisMonth == month && d < today) || month < thisMonth){
-                        ItemUtils.setDisplayName(item, MISS);
-                    }else {
-                        ItemUtils.setDisplayName(item, FUTURE);
-                    }
+                    item = ActivityButton.getNotSignItem(xDay, (thisMonth == month && d < today) || month < thisMonth); // 未签
                 }
             }
             // 展示天数(一些节日物品可能无法正常显示，例如鸡蛋最多叠16个)
-            if(Config.DISPLAY_ITEM_NUMBER){
-                item.setAmount(d);
-            }
+            if(Config.DISPLAY_ITEM_NUMBER) item.setAmount(d);
             // 点击指令 只有本月可以签到
-            if(thisMonth == month){
-                ItemUtils.setItemValue(item, "/sign " + d);
-            }
+            if(thisMonth == month) ItemUtils.setItemValue(item, "sign " + d);
             // 设置物品样式
             if (xDay != null) {
                 // 节日
                 String f = "";
-                if(xDay.getSolarFestival() != null){
-                    f += ("§e§l" + xDay.getSolarFestival()).replace("*", "§6*§e§l");
-                }
-                if(xDay.getLunarFestival() != null){
-                    f += ("§b§l" + xDay.getLunarFestival()).replace("*", "§6*§b§l");
-                }
-                if(xDay.getSolarTerms() != null){
-                    f += ("§2§l" + xDay.getSolarTerms());
-                }
+                if(xDay.getSolarFestival() != null) f += ("§e§l" + xDay.getSolarFestival()).replace("*", "§6*§e§l");
+                if(xDay.getLunarFestival() != null) f += ("§b§l" + xDay.getLunarFestival()).replace("*", "§6*§b§l");
+                if(xDay.getSolarTerms() != null) f += ("§2§l" + xDay.getSolarTerms());
                 ItemUtils.addLore(item, f);
                 // 日期
                 ItemUtils.addLore(item, String.format("§f%s年%s月%s日 %s", year, month, d, xDay.getDayOfWeek()));
@@ -155,60 +132,47 @@ public class MainPage implements ViewPage {
                 ItemUtils.addLore(item, String.format("§7%s %s %s", xDay.getcYear(), xDay.getcMonth(), xDay.getcDay()));
             }
 
-            // 日期展示成物品数量
-            if(Config.DISPLAY_ITEM_NUMBER) item.setAmount(d);
-            itemStackMap.put(index, item);
+            crashMap.put(index, item);
         }
 
         // 侧边导航
         User user = ActivityManager.getUser(target);
-        ItemStack activity;
-        if(Config.DISPLAY_SKIN){
-            activity = ItemUtils.createSkull(
-                    ActivityItem.ACTIVITY_SKULL.clone(),
-                    Bukkit.getOfflinePlayer(UUID.fromString(user.getUuid())));
-        }else {
-            activity = ActivityItem.ACTIVITY.clone();
-        }
-        ItemUtils.addItemData(activity, "活跃值", user.getActivity());
-        ItemUtils.addLore(activity, "§f点击查看礼包");
-        itemStackMap.put(8, activity);
+        ItemStack activity = crashMap.get(8);
+//        ItemStack tasks = crashMap.get(17);
+        ItemStack playtime = crashMap.get(26);
+        ItemStack sign = crashMap.get(35);
 
-        ItemStack tasks = ActivityItem.TASKS.clone();
-        ItemUtils.addLore(tasks, "§f点击查看最新活动");
-        itemStackMap.put(17, tasks);
+        ItemUtils.setLore(activity, String.format("§3§l活跃值§7: §f%s", user.getActivity()), 0);
 
-        ItemStack playtime = ActivityItem.PLAYTIME.clone();
-        ItemUtils.addItemData(playtime, "持续在线", TimeUtils.convertTime(ActivityManager.getOnlineTime(target)));
-        ItemUtils.addItemData(playtime, "今日在线", TimeUtils.convertTime(ActivityManager.getTodayOnlineTime(target)));
-        ItemUtils.addItemData(playtime, "总在线", TimeUtils.convertTime(user.getPlaytime()+ActivityManager.getOnlineTime(target)));
+        ItemUtils.setLore(playtime, String.format("§3§l持续在线§7: §f%s", TimeUtils.convertTime(ActivityManager.getOnlineTime(target))), 0);
+        ItemUtils.setLore(playtime, String.format("§3§l今日在线§7: §f%s", TimeUtils.convertTime(ActivityManager.getTodayOnlineTime(target))), 1);
+        ItemUtils.setLore(playtime, String.format("§3§l总在线§7: §f%s", TimeUtils.convertTime(user.getPlaytime()+ActivityManager.getOnlineTime(target))), 2);
         if(ActivityManager.hasTenMinuteReward(target)) {
-            ItemUtils.addLore(playtime, "§f点击领取在线十分钟奖励");
+            ItemUtils.setLore(playtime, "§f点击领取在线十分钟奖励", 3);
+        }else if(ActivityManager.hasTwoHourReward(target)) {
+            ItemUtils.setLore(playtime, "§f点击领取在线两小时奖励", 3);
+        }else if(ActivityManager.hasSixHourReward(target)) {
+            ItemUtils.setLore(playtime, "§f点击领取在线六小时奖励", 3);
         }
-        if(ActivityManager.hasTwoHourReward(target)) {
-            ItemUtils.addLore(playtime, "§f点击领取在线两小时奖励");
-        }
-        if(ActivityManager.hasSixHourReward(target)) {
-            ItemUtils.addLore(playtime, "§f点击领取在线六小时奖励");
-        }
-        itemStackMap.put(26, playtime);
 
-        ItemStack sign = ActivityItem.SIGN.clone();
-        ItemUtils.addItemData(sign, "补签机会", user.getChance());
-        ItemUtils.addItemData(sign, "连续签到", user.getSeries());
-        ItemUtils.addItemData(sign, "累计签到", user.getSigned());
-        ItemUtils.addLore(sign, "§f左右键切换月份");
-        itemStackMap.put(35, sign);
-        return itemStackMap;
+        ItemUtils.setLore(sign, String.format("§3§l补签机会§7: §f%s", user.getChance()), 0);
+        ItemUtils.setLore(sign, String.format("§3§l连续签到§7: §f%s", user.getSeries()), 1);
+        ItemUtils.setLore(sign, String.format("§3§l累计签到§7: §f%s", user.getSigned()), 2);
+        return crashMap;
     }
 
     @Override
-    public Map<Integer, ItemStack> getButtonMap() {
+    public @NotNull Map<Integer, ItemStack> getButtonMap() {
         return new HashMap<>(itemMap);
     }
 
     @Override
-    public Inventory getInventory(){
+    public @Nullable ItemStack getItem(int i) {
+        return crashMap.get(i);
+    }
+
+    @Override
+    public @NotNull Inventory getInventory(){
         return inventory;
     }
 
@@ -252,11 +216,19 @@ public class MainPage implements ViewPage {
 
     @Override
     public void refreshPage() {
-        for(int i = 7 ; i < 53 ; i+=9) {
-            itemMap.put(i, ActivityItem.BLANK);
-        }
-        itemMap.put(44, ActivityItem.BLANK);
-        itemMap.put(53, ActivityItem.CLOSE);
+        for(int i = 7 ; i < 53 ; i+=9) itemMap.put(i, ActivityButton.BLANK);
+
+
+        itemMap.put(8, ActivityButton.ACTIVITY.clone());
+        itemMap.put(17, ActivityButton.TASKS.clone());
+        itemMap.put(26, ActivityButton.PLAYTIME.clone());
+        itemMap.put(35, ActivityButton.SIGN.clone());
+        itemMap.put(53, ActivityButton.CLOSE);
+    }
+
+    @Override
+    public void updateTitle(String s) {
+
     }
 
 }

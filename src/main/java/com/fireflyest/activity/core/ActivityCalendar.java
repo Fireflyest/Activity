@@ -1,7 +1,5 @@
 package com.fireflyest.activity.core;
 
-import org.junit.Test;
-
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,9 +10,9 @@ import java.util.*;
  * 2022/2/27 21:06
  */
 
-public class XCalendar {
+public class ActivityCalendar {
 
-    public static Map<String,XDay> cache=new HashMap<>();
+    public static Map<String, Day> cache=new HashMap<>();
 
     private final static String[] chineseNumber = { "正", "二", "三", "四", "五", "六", "七",
             "八", "九", "十", "十一", "腊" };
@@ -227,20 +225,20 @@ public class XCalendar {
         return cal.get(Calendar.DATE);
     }
 
-    public XCalendar(){}
+    public ActivityCalendar(){}
 
     /**
      * 传出y年m月d日对应的农历. yearCyl3:农历年与1864的相差数 ? monCyl4:从1900年1月31日以来,闰月数
      * dayCyl5:与1900年1月31日相差的天数,再加40 ?
      *
      */
-    public XDay getXDay(int sYear, int sMonth, int sDay) throws ParseException {
+    public Day getXDay(int sYear, int sMonth, int sDay) throws ParseException {
         String key = String.format("%s-%s-%s 08:00:00", sYear, sMonth, sDay);
         if (cache.containsKey(key)){
             return cache.get(key);
         }
 
-        XDay xDay = new XDay(sYear, sMonth, sDay);
+        Day xDay = new Day(sYear, sMonth, sDay);
         Date baseDate = null, date = null;
         try {
             date = simpleDateFormat.parse(key);
@@ -371,7 +369,7 @@ public class XCalendar {
 
 
 
-    public static class XDay{
+    public static class Day {
         // 公历
         private final int year;
         private final int month;
@@ -389,7 +387,7 @@ public class XCalendar {
         // 节气
         private String solarTerms;
 
-        public XDay(int year, int month, int day) {
+        public Day(int year, int month, int day) {
             this.year = year;
             this.month = month;
             this.day = day;

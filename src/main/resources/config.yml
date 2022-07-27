@@ -1,25 +1,27 @@
-Version: '2.0.0-SNAPSHOT'
+Version: '${project.version}'
 
-#SQL参数(高一点的版本需要在url加上'useSSL=false')
+Debug: false
+
+# SQL参数(高一点的版本需要在url加上'useSSL=false')
 Sql: false
 Url: 'jdbc:mysql://localhost:3306/mc_market?useSSL=false&serverTimezone=UTC'
 User: 'root'
 Password: '123456'
 
-#是否展示菜单中玩家头颅的皮肤(可能引起网络问题造成网络问题)
-DisplaySkin: true
+# 是否展示菜单中玩家头颅的皮肤
 DisplayItemNumber: false
 
-#默认的补签次数，每个月会送的数量
+# 默认的补签次数，每个月会送的数量
 DefaultChance: 2
 
-#活跃答题奖励积分
+# 活跃答题奖励积分
 QuizActivity: 1
 
-#奖励，随机取一。
-# 签到, 坏奖励, 连续签到一星期奖励, 月连续
+# 奖励，随机取一
+# 签到, 1/7的几率是坏奖励
 SignRewards: []
 BadRewards: []
+# 连续签到一星期, 连续签到一个月
 SeriesRewards: []
 PerfectRewards: []
 # 十分钟, 两小时, 六小时

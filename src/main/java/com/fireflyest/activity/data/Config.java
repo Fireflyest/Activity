@@ -6,7 +6,6 @@ import java.util.Set;
 public class Config {
 
     public static String VERSION;
-    public static boolean DISPLAY_SKIN;
     public static boolean DISPLAY_ITEM_NUMBER;
     public static boolean TASK_PROGRESS;
     public static boolean DEBUG;

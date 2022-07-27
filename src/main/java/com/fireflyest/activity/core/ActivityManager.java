@@ -10,7 +10,7 @@ import com.fireflyest.activity.data.Storage;
 import com.fireflyest.activity.util.MysqlExecuteUtils;
 import com.fireflyest.activity.util.SqliteExecuteUtils;
 import com.fireflyest.activity.util.TimeUtils;
-import com.fireflyest.gui.api.ViewGuide;
+import org.fireflyest.craftgui.api.ViewGuide;
 
 import java.util.ArrayList;
 import java.util.HashMap;

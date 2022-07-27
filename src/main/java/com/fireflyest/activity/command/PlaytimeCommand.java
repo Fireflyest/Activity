@@ -6,12 +6,12 @@ import com.fireflyest.activity.core.ActivityManager;
 import com.fireflyest.activity.core.RewardManager;
 import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.data.Language;
-import com.fireflyest.gui.api.ViewGuide;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.fireflyest.craftgui.api.ViewGuide;
 import org.jetbrains.annotations.NotNull;
 
 public class PlaytimeCommand implements CommandExecutor {

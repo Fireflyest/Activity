@@ -1,6 +1,7 @@
 package com.fireflyest.activity.view;
 
-import com.fireflyest.gui.api.View;
+
+import org.fireflyest.craftgui.api.View;
 
 public class RewardView implements View<RewardPage> {
 
@@ -9,7 +10,7 @@ public class RewardView implements View<RewardPage> {
     private final RewardPage page;
 
     public RewardView(String title) {
-        page = new RewardPage(title, NORMAL);
+        page = new RewardPage(title, NORMAL, 1);
     }
 
     @Override

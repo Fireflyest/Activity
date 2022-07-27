@@ -2,13 +2,17 @@ package com.fireflyest.activity.view;
 
 import com.fireflyest.activity.Activity;
 import com.fireflyest.activity.bean.Task;
-import com.fireflyest.activity.core.ActivityItem;
+import com.fireflyest.activity.core.ActivityButton;
 import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.util.*;
-import com.fireflyest.gui.api.ViewPage;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.fireflyest.craftgui.api.ViewPage;
+import org.fireflyest.craftgui.util.ItemUtils;
+import org.fireflyest.craftgui.util.SerializeUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,23 +51,22 @@ public class TaskPage implements ViewPage {
     }
 
     @Override
-    public Map<Integer, ItemStack> getItemMap(){
+    public @NotNull Map<Integer, ItemStack> getItemMap(){
         Map<Integer, ItemStack> itemStackMap = new HashMap<>(itemMap);
         List<Task> tasks = data.query(Task.class, 0, 44);
         int i = 0, j = 45;
         for (Task task : tasks) {
             ItemStack item = SerializeUtil.deserialize(task.getStack(), task.getMeta());
-            ItemUtils.addItemHide(item);
             ItemUtils.setDisplayName(item, "§e§l" + task.getName());
             ItemUtils.addLore(item, "§7§m·                         ·");
-            ItemUtils.addItemData(item, "ID", task.getId());
+            ItemUtils.addLore(item, String.format("§3§lID§7: §f%s", task.getId()));
             // 是否永久活动
             long deadline = task.getDeadline();
             if (deadline == 0){
                 itemStackMap.put(j, item);
                 j++;
             }else {
-                ItemUtils.addItemData(item, "期限", TimeUtils.getTime(deadline));
+                ItemUtils.addLore(item, String.format("§3§l期限§7: §f%s", TimeUtils.getTime(deadline)));
                 itemStackMap.put(i, item);
                 i++;
             }
@@ -73,12 +76,17 @@ public class TaskPage implements ViewPage {
     }
 
     @Override
-    public Map<Integer, ItemStack> getButtonMap() {
+    public @NotNull Map<Integer, ItemStack> getButtonMap() {
         return new HashMap<>(itemMap);
     }
 
     @Override
-    public Inventory getInventory(){
+    public @Nullable ItemStack getItem(int i) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Inventory getInventory(){
         return inventory;
     }
 
@@ -115,10 +123,15 @@ public class TaskPage implements ViewPage {
     @Override
     public void refreshPage() {
         for(int i = 36 ; i < 45 ; i++) {
-            itemMap.put(i, ActivityItem.BLANK);
+            itemMap.put(i, ActivityButton.BLANK);
         }
-        itemMap.put(52, ActivityItem.BLANK);
-        itemMap.put(53, ActivityItem.RETURN);
+        itemMap.put(52, ActivityButton.BLANK);
+        itemMap.put(53, ActivityButton.BACK);
+    }
+
+    @Override
+    public void updateTitle(String s) {
+
     }
 
 }

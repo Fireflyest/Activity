@@ -9,12 +9,12 @@ import com.fireflyest.activity.data.Language;
 import com.fireflyest.activity.util.ConvertUtils;
 import com.fireflyest.activity.util.YamlUtils;
 import com.fireflyest.activity.view.RewardView;
-import com.fireflyest.gui.api.ViewGuide;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.fireflyest.craftgui.api.ViewGuide;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

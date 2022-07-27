@@ -50,7 +50,6 @@ public class YamlUtils {
             if(method == null) continue;
             try {
                 field.set(null, method.invoke(config, key));
-//                System.out.println(key +  " = " + method.invoke(config, key));
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
@@ -68,10 +67,11 @@ public class YamlUtils {
             try {
                 boolean mkdirs = file.getParentFile().mkdirs();
                 boolean create =  file.createNewFile();
+                if (Config.DEBUG) plugin.getLogger().info(String.format("mkdirs=%s create=%s!", mkdirs, create));
                 plugin.saveResource(ymlName+".yml", true);
             } catch (IOException e) {
                 e.printStackTrace();
-                Bukkit.getServer().getLogger().severe(String.format("无法创建文件 %s!", ymlName+".yml"));
+                plugin.getLogger().severe(String.format("无法创建文件 %s!", ymlName+".yml"));
             }
         }
 
@@ -97,7 +97,7 @@ public class YamlUtils {
         try {
             config.save(file);
         } catch (IOException e) {
-            Bukkit.getServer().getLogger().severe(String.format("无法保存数据 %s!", "config.yml"));
+            plugin.getLogger().severe(String.format("无法保存数据 %s!", "config.yml"));
         }
     }
 
