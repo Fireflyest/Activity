@@ -1,21 +1,11 @@
 package com.fireflyest.activity.command;
 
-import com.fireflyest.activity.Activity;
-import com.fireflyest.activity.bean.Reward;
 import com.fireflyest.activity.core.QuizManager;
-import com.fireflyest.activity.core.RewardManager;
-import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.data.Language;
-import com.fireflyest.activity.util.ConvertUtils;
-import com.fireflyest.activity.util.SerializeUtil;
-import com.fireflyest.gui.api.ViewGuide;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class QuizCommand implements CommandExecutor {

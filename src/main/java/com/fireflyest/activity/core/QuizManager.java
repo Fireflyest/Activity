@@ -53,7 +53,7 @@ public class QuizManager {
 
                 cancel();
             }
-        }.runTaskLaterAsynchronously(Activity.getInstance(), 20*60);
+        }.runTaskLater(Activity.getInstance(), 20*60);
 
         return true;
     }

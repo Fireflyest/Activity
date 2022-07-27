@@ -64,7 +64,7 @@ public class PlaytimeCommand implements CommandExecutor {
                 data.update(user);
                 guide.refreshPage(playerName);
             }
-        }.runTaskAsynchronously(Activity.getInstance());
+        }.runTask(Activity.getInstance());
     }
 
 }

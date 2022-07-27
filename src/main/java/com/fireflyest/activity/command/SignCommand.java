@@ -108,10 +108,16 @@ public class SignCommand implements CommandExecutor {
                 data.update(day);
                 // 奖励
                 RewardManager.giveReward(player, RewardManager.SIGN);
+            }
+        }.runTask(Activity.getInstance());
+
+        new BukkitRunnable(){
+            @Override
+            public void run() {
                 // 刷新页面
                 guide.refreshPage(playerName);
             }
-        }.runTaskAsynchronously(Activity.getInstance());
+        }.runTaskLater(Activity.getInstance(), 2);
     }
 
 }

@@ -3,7 +3,6 @@ package com.fireflyest.activity.sql;
 import com.fireflyest.activity.data.Storage;
 import com.fireflyest.activity.util.JdbcUtils;
 import com.fireflyest.activity.util.ReflectUtils;
-import com.fireflyest.activity.util.SqliteUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -50,7 +49,7 @@ public class SqlStorage implements Storage {
         } catch (SQLException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }finally {
-            SqliteUtils.close(resultSet, statement);
+            JdbcUtils.close(resultSet, statement);
         }
         return list;
     }

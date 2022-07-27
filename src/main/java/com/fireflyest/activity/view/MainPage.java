@@ -157,7 +157,7 @@ public class MainPage implements ViewPage {
 
             // 日期展示成物品数量
             if(Config.DISPLAY_ITEM_NUMBER) item.setAmount(d);
-            itemMap.put(index, item);
+            itemStackMap.put(index, item);
         }
 
         // 侧边导航
@@ -172,11 +172,11 @@ public class MainPage implements ViewPage {
         }
         ItemUtils.addItemData(activity, "活跃值", user.getActivity());
         ItemUtils.addLore(activity, "§f点击查看礼包");
-        itemMap.put(8, activity);
+        itemStackMap.put(8, activity);
 
         ItemStack tasks = ActivityItem.TASKS.clone();
         ItemUtils.addLore(tasks, "§f点击查看最新活动");
-        itemMap.put(17, tasks);
+        itemStackMap.put(17, tasks);
 
         ItemStack playtime = ActivityItem.PLAYTIME.clone();
         ItemUtils.addItemData(playtime, "持续在线", TimeUtils.convertTime(ActivityManager.getOnlineTime(target)));
@@ -191,14 +191,14 @@ public class MainPage implements ViewPage {
         if(ActivityManager.hasSixHourReward(target)) {
             ItemUtils.addLore(playtime, "§f点击领取在线六小时奖励");
         }
-        itemMap.put(26, playtime);
+        itemStackMap.put(26, playtime);
 
         ItemStack sign = ActivityItem.SIGN.clone();
         ItemUtils.addItemData(sign, "补签机会", user.getChance());
         ItemUtils.addItemData(sign, "连续签到", user.getSeries());
         ItemUtils.addItemData(sign, "累计签到", user.getSigned());
         ItemUtils.addLore(sign, "§f左右键切换月份");
-        itemMap.put(35, sign);
+        itemStackMap.put(35, sign);
         return itemStackMap;
     }
 

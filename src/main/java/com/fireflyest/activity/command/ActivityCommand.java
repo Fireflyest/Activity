@@ -106,7 +106,7 @@ public class ActivityCommand implements CommandExecutor {
                         sender.sendMessage(Language.ACTIVITY_RANK);
                         int i = 1;
                         for (User rank : ranks) {
-                            sender.sendMessage(String.format("§3%s§7. %s      §3%s", i, rank.getName(), rank.getActivity()));
+                            sender.sendMessage(String.format("§3%s§7.§f %s      §3%s", i, rank.getName(), rank.getActivity()));
                             i++;
                             if(i > 10) break;
                         }

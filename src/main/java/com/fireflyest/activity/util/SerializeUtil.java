@@ -108,6 +108,7 @@ public class SerializeUtil {
             int r = 1;
             while (clazz == null && r < 9){
                 try {
+
                     clazz = Class.forName(
                             String.format("org.bukkit.craftbukkit.v1_%s_R%d.inventory.CraftMetaItem$SerializableMeta", v, r));
                 } catch (ClassNotFoundException ignore) {}
