@@ -2,7 +2,9 @@ package com.fireflyest.activity.view;
 
 import com.fireflyest.activity.Activity;
 import com.fireflyest.activity.bean.Reward;
+import com.fireflyest.activity.bean.Rewards;
 import com.fireflyest.activity.core.ActivityButton;
+import com.fireflyest.activity.core.RewardManager;
 import com.fireflyest.activity.data.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
@@ -13,9 +15,9 @@ import org.fireflyest.craftgui.util.SerializeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author Fireflyest
@@ -32,6 +34,7 @@ public class RewardPage implements ViewPage {
 
     private final Map<Integer, ItemStack> itemMap = new HashMap<>();
     private final Map<Integer, ItemStack> crashMap = new HashMap<>();
+    private final Map<Integer, Reward> rewardMap = new HashMap<>();
 
     private ViewPage next = null;
     private ViewPage pre = null;
@@ -45,7 +48,9 @@ public class RewardPage implements ViewPage {
 
         String guiTitle = title;
 
-        if (target != null)  guiTitle += ("§9" + target);    // 副标题
+        if (target != null)  guiTitle += ("§9" + target) + "";    // 副标题
+        if (page != 0) guiTitle += (" §7#§8" + page);          // 给标题加上页码
+
 
         // 界面容器
         this.inventory = Bukkit.createInventory(null, 54, guiTitle);
@@ -79,6 +84,44 @@ public class RewardPage implements ViewPage {
             crashMap.put(35, ActivityButton.PAGE_NEXT);
         }
 
+        // 获取所有奖励
+        List<Reward> allRewards = data.query(Reward.class);
+        rewardMap.clear();
+        rewardMap.putAll(allRewards.stream().collect(Collectors.toMap(Reward::getId, Function.identity(), (key1, key2) -> key2)));
+        if (target.equals(RewardView.SIGN)){
+            ItemStack bad = ActivityButton.BAD_REWARDS.clone();
+            this.applyRewards(bad, RewardManager.getRewards(RewardManager.BAD));
+            crashMap.put(45, bad);
+
+            ItemStack sign = ActivityButton.SIGN_REWARDS.clone();
+            this.applyRewards(sign, RewardManager.getRewards(RewardManager.SIGN));
+            crashMap.put(46, sign);
+
+            ItemStack series = ActivityButton.SERIES_REWARDS.clone();
+            this.applyRewards(series, RewardManager.getRewards(RewardManager.SERIES));
+            crashMap.put(47, series);
+
+            ItemStack perfect = ActivityButton.PERFECT_REWARDS.clone();
+            this.applyRewards(perfect, RewardManager.getRewards(RewardManager.PERFECT));
+            crashMap.put(48, perfect);
+        } else if (target.equals(RewardView.PLAYTIME)) {
+            ItemStack tenM = ActivityButton.TEN_MINUTES_REWARDS.clone();
+            this.applyRewards(tenM, RewardManager.getRewards(RewardManager.TEN_MINUTE));
+            crashMap.put(45, tenM);
+
+            ItemStack oneH = ActivityButton.ONE_HOURS_REWARDS.clone();
+            this.applyRewards(oneH, RewardManager.getRewards(RewardManager.ONE_HOURS));
+            crashMap.put(46, oneH);
+
+            ItemStack threeH = ActivityButton.THREE_HOURS_REWARDS.clone();
+            this.applyRewards(threeH, RewardManager.getRewards(RewardManager.THREE_HOURS));
+            crashMap.put(47, threeH);
+
+            ItemStack sixH = ActivityButton.SIX_HOURS_REWARDS.clone();
+            this.applyRewards(sixH, RewardManager.getRewards(RewardManager.SIX_HOURS));
+            crashMap.put(48, sixH);
+        }
+
         return crashMap;
     }
 
@@ -99,12 +142,12 @@ public class RewardPage implements ViewPage {
 
     @Override
     public String getTarget() {
-        return null;
+        return target;
     }
 
     @Override
     public int getPage() {
-        return 0;
+        return page;
     }
 
     @Override
@@ -145,15 +188,41 @@ public class RewardPage implements ViewPage {
         // 下一页
         itemMap.put(35, ActivityButton.PAGE_NEXT_DISABLE);
 
-        itemMap.put(45, ActivityButton.BAD_REWARDS);
-        itemMap.put(46, ActivityButton.SIGN_REWARDS);
-        itemMap.put(47, ActivityButton.SERIES_REWARDS);
-        itemMap.put(48, ActivityButton.PERFECT_REWARDS);
+        if (target.equals(RewardView.SIGN)){
+            itemMap.put(45, ActivityButton.BAD_REWARDS);
+            itemMap.put(46, ActivityButton.SIGN_REWARDS);
+            itemMap.put(47, ActivityButton.SERIES_REWARDS);
+            itemMap.put(48, ActivityButton.PERFECT_REWARDS);
+        } else if (target.equals(RewardView.PLAYTIME)) {
+            itemMap.put(45, ActivityButton.TEN_MINUTES_REWARDS);
+            itemMap.put(46, ActivityButton.ONE_HOURS_REWARDS);
+            itemMap.put(47, ActivityButton.THREE_HOURS_REWARDS);
+            itemMap.put(48, ActivityButton.SIX_HOURS_REWARDS);
+        }
+
     }
 
     @Override
     public void updateTitle(String s) {
 
+    }
+
+    private void applyRewards(ItemStack item, Rewards rewards){
+        if (rewards == null || rewards.noReward()) return;
+        Set<Reward> rewardSet = new HashSet<>();
+        for (Integer integer : rewards.getIntegerList()) rewardSet.add(rewardMap.get(integer));
+        StringBuilder line = new StringBuilder("§f");
+        int i = 0; // 列
+        for (Reward reward : rewardSet) {
+            line.append(String.format("%-8s", reward.getName()));
+            i++;
+            if (i%3 == 0) {
+                i = 0;
+                ItemUtils.addLore(item, line.toString());
+                line = new StringBuilder("§f");
+            }
+        }
+        ItemUtils.addLore(item, line.toString());
     }
 
 }

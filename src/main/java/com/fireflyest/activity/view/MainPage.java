@@ -68,6 +68,7 @@ public class MainPage implements ViewPage {
     public @NotNull Map<Integer, ItemStack> getItemMap(){
         // 数据库查询指令
         int today = TimeUtils.getDay();
+        int thisMonth = TimeUtils.getMonth();
         String condition = String.format(" where owner='%s' and month=%s", target, month);
         String sql;
         if(Config.SQL){
@@ -104,7 +105,6 @@ public class MainPage implements ViewPage {
                 k++;
             }
             ItemStack item;
-            int thisMonth = TimeUtils.getMonth();
             if(iDay.isSign()){
                 item = ActivityButton.SIGNED.clone(); // 已签
             }else {
@@ -135,12 +135,15 @@ public class MainPage implements ViewPage {
             crashMap.put(index, item);
         }
 
+        if (thisMonth != month){
+            return crashMap;
+        }
+
         // 侧边导航
         User user = ActivityManager.getUser(target);
         ItemStack activity = crashMap.get(8);
-//        ItemStack tasks = crashMap.get(17);
-        ItemStack playtime = crashMap.get(26);
-        ItemStack sign = crashMap.get(35);
+        ItemStack playtime = crashMap.get(17);
+        ItemStack sign = crashMap.get(26);
 
         ItemUtils.setLore(activity, String.format("§3§l活跃值§7: §f%s", user.getActivity()), 0);
 
@@ -148,11 +151,11 @@ public class MainPage implements ViewPage {
         ItemUtils.setLore(playtime, String.format("§3§l今日在线§7: §f%s", TimeUtils.convertTime(ActivityManager.getTodayOnlineTime(target))), 1);
         ItemUtils.setLore(playtime, String.format("§3§l总在线§7: §f%s", TimeUtils.convertTime(user.getPlaytime()+ActivityManager.getOnlineTime(target))), 2);
         if(ActivityManager.hasTenMinuteReward(target)) {
-            ItemUtils.setLore(playtime, "§f点击领取在线十分钟奖励", 3);
-        }else if(ActivityManager.hasTwoHourReward(target)) {
-            ItemUtils.setLore(playtime, "§f点击领取在线两小时奖励", 3);
+            ItemUtils.setLore(playtime, "§fShift+点击领取在线十分钟奖励", 3);
+        }else if(ActivityManager.hasThreeHourReward(target)) {
+            ItemUtils.setLore(playtime, "§fShift+点击领取在线两小时奖励", 3);
         }else if(ActivityManager.hasSixHourReward(target)) {
-            ItemUtils.setLore(playtime, "§f点击领取在线六小时奖励", 3);
+            ItemUtils.setLore(playtime, "§fShift+点击领取在线六小时奖励", 3);
         }
 
         ItemUtils.setLore(sign, String.format("§3§l补签机会§7: §f%s", user.getChance()), 0);
@@ -218,12 +221,14 @@ public class MainPage implements ViewPage {
     public void refreshPage() {
         for(int i = 7 ; i < 53 ; i+=9) itemMap.put(i, ActivityButton.BLANK);
 
-
         itemMap.put(8, ActivityButton.ACTIVITY.clone());
-        itemMap.put(17, ActivityButton.TASKS.clone());
-        itemMap.put(26, ActivityButton.PLAYTIME.clone());
-        itemMap.put(35, ActivityButton.SIGN.clone());
+        itemMap.put(35, ActivityButton.MONTH.clone());
         itemMap.put(53, ActivityButton.CLOSE);
+
+        if (month == TimeUtils.getMonth()){
+            itemMap.put(17, ActivityButton.PLAYTIME.clone());
+            itemMap.put(26, ActivityButton.SIGN.clone());
+        }
     }
 
     @Override

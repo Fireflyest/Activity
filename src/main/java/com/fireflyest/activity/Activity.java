@@ -3,6 +3,7 @@ package com.fireflyest.activity;
 import com.fireflyest.activity.bean.*;
 import com.fireflyest.activity.command.*;
 import com.fireflyest.activity.core.ActivityManager;
+import com.fireflyest.activity.core.RewardManager;
 import com.fireflyest.activity.data.Config;
 import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.data.Language;
@@ -15,6 +16,7 @@ import com.fireflyest.activity.sqll.SqLiteStorage;
 import com.fireflyest.activity.util.ChatUtils;
 import com.fireflyest.activity.util.YamlUtils;
 import com.fireflyest.activity.view.MainView;
+import com.fireflyest.activity.view.MineView;
 import com.fireflyest.activity.view.RewardView;
 import com.fireflyest.activity.view.TaskView;
 import net.milkbowl.vault.economy.Economy;
@@ -41,7 +43,7 @@ public class Activity extends JavaPlugin {
 
     public static final String MAIN_VIEW = "activity.main";
     public static final String REWARD_VIEW = "activity.reward";
-    public static final String PLAYTIME_VIEW = "activity.playtime";
+    public static final String MINE_VIEW = "activity.mine";
     public static final String TASK_VIEW = "activity.task";
 
     private static Storage storage;
@@ -70,6 +72,8 @@ public class Activity extends JavaPlugin {
         this.setupData();
         this.setupGuide();
         setupEconomy();
+        RewardManager.setupRewards();
+        ActivityManager.initActivityManager();
 
         // 注册事件
         this.getServer().getPluginManager().registerEvents( new PlayerEventListener(), this);
@@ -105,10 +109,8 @@ public class Activity extends JavaPlugin {
             quizCommand.setTabCompleter(new QuizTab());
         }
 
-        ActivityManager.initActivityManager();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            ActivityManager.playerJoin(player.getName());
-        }
+        // 重置在线数据
+        for (Player player : Bukkit.getOnlinePlayers()) ActivityManager.playerJoin(player.getName());
 
         // 在线提醒
         new BukkitRunnable(){
@@ -117,7 +119,7 @@ public class Activity extends JavaPlugin {
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                     String playerName = onlinePlayer.getName();
                     if(ActivityManager.hasTenMinuteReward(playerName)
-                            || ActivityManager.hasTwoHourReward(playerName)
+                            || ActivityManager.hasThreeHourReward(playerName)
                             || ActivityManager.hasSixHourReward(playerName)){
                         onlinePlayer.sendMessage(Language.PLAYTIME_REMIND);
                         ChatUtils.sendCommandButton(onlinePlayer, "在线奖励", "点击打开签到界面", "/activity");
@@ -139,7 +141,7 @@ public class Activity extends JavaPlugin {
         }
     }
 
-    private void setupData(){
+    public void setupData(){
         YamlUtils.iniYamlUtils(plugin);
 
         if(Config.SQL){
@@ -190,7 +192,7 @@ public class Activity extends JavaPlugin {
     /**
      * 界面初始化
      */
-    private void setupGuide() {
+    public void setupGuide() {
         RegisteredServiceProvider<ViewGuide> rsp = Bukkit.getServer().getServicesManager().getRegistration(ViewGuide.class);
         if (rsp == null) {
             Bukkit.getLogger().warning("Gui not found!");
@@ -200,6 +202,7 @@ public class Activity extends JavaPlugin {
 
         guide.addView(MAIN_VIEW, new MainView(Language.PLUGIN_NAME));
         guide.addView(REWARD_VIEW, new RewardView(Language.PLUGIN_NAME));
+        guide.addView(MINE_VIEW, new MineView(Language.PLUGIN_NAME));
         guide.addView(TASK_VIEW, new TaskView(Language.PLUGIN_NAME));
 
     }

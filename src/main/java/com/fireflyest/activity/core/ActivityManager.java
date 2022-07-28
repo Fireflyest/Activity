@@ -12,10 +12,7 @@ import com.fireflyest.activity.util.SqliteExecuteUtils;
 import com.fireflyest.activity.util.TimeUtils;
 import org.fireflyest.craftgui.api.ViewGuide;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Fireflyest
@@ -27,8 +24,10 @@ public class ActivityManager {
     private static final Map<String,Long> joinTime = new HashMap<>();
 
     private static final List<String> tenMinuteReward = new ArrayList<>();
-    private static final List<String> twoHourReward = new ArrayList<>();
+    private static final List<String> oneHourReward = new ArrayList<>();
+    private static final List<String> threeHourReward = new ArrayList<>();
     private static final List<String> sixHourReward = new ArrayList<>();
+    private static final Map<String, Long> lastOnline = new HashMap<>();
 
     private static ViewGuide guide;
     private static Data data;
@@ -73,7 +72,15 @@ public class ActivityManager {
     }
 
     public static void playerJoin(String name){
+       // 判断五分钟内是否在线
+        if (lastOnline.containsKey(name) && (TimeUtils.getDate() - lastOnline.get(name))/(1000*60) <5) return;
+        // 重置在线时间
         joinTime.put(name, TimeUtils.getDate());
+        // 重置在线奖励
+        tenMinuteReward.remove(name);
+        oneHourReward.remove(name);
+        threeHourReward.remove(name);
+        sixHourReward.remove(name);
     }
 
     public static void playerQuit(String playerName){
@@ -83,7 +90,8 @@ public class ActivityManager {
         day.setPlaytime(day.getPlaytime() + getOnlineTime(playerName));
         data.update(user);
         data.update(day);
-        joinTime.remove(playerName);
+        // 最后在线
+        lastOnline.put(playerName, TimeUtils.getDate());
     }
 
     public static long getOnlineTime(String playerName){
@@ -103,8 +111,17 @@ public class ActivityManager {
         return  (getOnlineTime(playerName) > 1000*60*10 && !tenMinuteReward.contains(playerName));
     }
 
-    public static boolean hasTwoHourReward(String playerName){
-        return  (getOnlineTime(playerName) > 1000*60*60*2 && !twoHourReward.contains(playerName));
+    public static boolean hasOneHourReward(String playerName){
+        return  (getOnlineTime(playerName) > 1000*60*60 && !oneHourReward.contains(playerName));
+    }
+
+    /**
+     * 判断是否有三小时奖励
+     * @param playerName 玩家名
+     * @return 有无奖励
+     */
+    public static boolean hasThreeHourReward(String playerName){
+        return  (getOnlineTime(playerName) > 1000*60*60*3 && !threeHourReward.contains(playerName));
     }
 
     public static boolean hasSixHourReward(String playerName){
@@ -115,8 +132,17 @@ public class ActivityManager {
         tenMinuteReward.add(playerName);
     }
 
-    public static void ridTwoHourReward(String playerName){
-        twoHourReward.add(playerName);
+
+    /**
+     * 去除一小时奖励，已领取
+     * @param playerName 玩家名
+     */
+    public static void ridOneHourReward(String playerName){
+        oneHourReward.add(playerName);
+    }
+
+    public static void ridThreeHourReward(String playerName){
+        threeHourReward.add(playerName);
     }
 
     public static void ridSixHourReward(String playerName){

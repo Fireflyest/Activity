@@ -2,6 +2,7 @@ package com.fireflyest.activity.command;
 
 import com.fireflyest.activity.Activity;
 import com.fireflyest.activity.bean.Reward;
+import com.fireflyest.activity.bean.Rewards;
 import com.fireflyest.activity.core.RewardManager;
 import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.data.Language;
@@ -16,6 +17,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.fireflyest.craftgui.api.ViewGuide;
 import org.fireflyest.craftgui.util.SerializeUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 public class RewardCommand implements CommandExecutor {
 
@@ -53,11 +56,9 @@ public class RewardCommand implements CommandExecutor {
     }
 
     private void executeCommand(CommandSender sender){
-        Player player = (sender instanceof Player)? (Player)sender : null;
-        if (player != null) {
-            guide.openView(player, Activity.REWARD_VIEW, sender.getName());
-        }else {
-            sender.sendMessage(Language.PLAYER_COMMAND);
+        for (Map.Entry<String, Rewards> stringRewardsEntry : RewardManager.getRewardMap().entrySet()) {
+            sender.sendMessage(String.format("§3Reward Type§7: §f%s", stringRewardsEntry.getKey()));
+            sender.sendMessage(String.format("§7%s", stringRewardsEntry.getValue().getIntegerList().toString()));
         }
     }
 

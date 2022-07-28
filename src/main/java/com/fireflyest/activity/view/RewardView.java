@@ -3,19 +3,24 @@ package com.fireflyest.activity.view;
 
 import org.fireflyest.craftgui.api.View;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RewardView implements View<RewardPage> {
 
-    public static final String NORMAL = "奖品列表";
+    private final Map<String, RewardPage> pageMap = new HashMap<>();
+    public static final String SIGN = "签到奖品";
+    public static final String PLAYTIME = "在线奖品";
 
-    private final RewardPage page;
 
     public RewardView(String title) {
-        page = new RewardPage(title, NORMAL, 1);
+        pageMap.put(SIGN, new RewardPage(title, SIGN, 1));
+        pageMap.put(PLAYTIME, new RewardPage(title, PLAYTIME, 1));
     }
 
     @Override
     public RewardPage getFirstPage(String target){
-        return page;
+        return pageMap.get(target);
     }
 
     @Override

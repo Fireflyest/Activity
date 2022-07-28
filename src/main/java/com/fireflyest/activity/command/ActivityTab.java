@@ -19,6 +19,7 @@ public class ActivityTab implements TabCompleter {
         list.add("rank");
         list.add("task");
         list.add("sign");
+        list.add("mine");
         list.add("reload");
     }
 

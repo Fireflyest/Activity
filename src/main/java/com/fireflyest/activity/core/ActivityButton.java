@@ -32,13 +32,27 @@ public class ActivityButton {
     public static ItemStack SIGN;
     public static ItemStack PLAYTIME;
     public static ItemStack TASKS;
+    public static ItemStack MONTH;
+    public static ItemStack JAN_DATA;
+    public static ItemStack FEB_DATA;
+    public static ItemStack MAR_DATA;
+    public static ItemStack APR_DATA;
+    public static ItemStack MAY_DATA;
+    public static ItemStack JUN_DATA;
+    public static ItemStack JUL_DATA;
+    public static ItemStack AUG_DATA;
+    public static ItemStack SEP_DATA;
+    public static ItemStack OCT_DATA;
+    public static ItemStack NOV_DATA;
+    public static ItemStack DEC_DATA;
 
     public static ItemStack SIGN_REWARDS;
     public static ItemStack BAD_REWARDS;
     public static ItemStack SERIES_REWARDS;
     public static ItemStack PERFECT_REWARDS;
     public static ItemStack TEN_MINUTES_REWARDS;
-    public static ItemStack TWO_HOURS_REWARDS;
+    public static ItemStack ONE_HOURS_REWARDS;
+    public static ItemStack THREE_HOURS_REWARDS;
     public static ItemStack SIX_HOURS_REWARDS;
 
     private static final Map<String, Material> festivalItemMap = new HashMap<String, Material>(){
@@ -97,7 +111,7 @@ public class ActivityButton {
                 .build();
         ADD_REWARD = new ViewItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial())
                 .name("§3§l添加")
-                .command("reward")
+                .command("addReward")
                 .build();
         TODAY = new ViewItemBuilder(XMaterial.WRITABLE_BOOK.parseMaterial())
                 .name("§f§l[§a§l签到§f§l]")
@@ -117,10 +131,10 @@ public class ActivityButton {
         FESTIVAL = new ViewItemBuilder(XMaterial.ENCHANTED_BOOK.parseMaterial())
                 .build();
         ACTIVITY = new ViewItemBuilder(XMaterial.PLAYER_HEAD.parseMaterial())
-                .name("§e§l活跃奖励")
-                .command("activity rewards")
+                .name("§e§l个人信息")
+                .command("activity mine")
                 .lore("")
-                .lore("§f点击查看礼包")
+                .lore("§f点击查看")
                 .build();
         TASKS = new ViewItemBuilder(XMaterial.ENDER_EYE.parseMaterial())
                 .name("§e§l活动列表")
@@ -129,23 +143,96 @@ public class ActivityButton {
                 .build();
         PLAYTIME = new ViewItemBuilder(XMaterial.CLOCK.parseMaterial())
                 .name("§e§l在线数据")
+                .lore("")
+                .lore("")
+                .lore("")
+                .lore("§f点击查看奖励")
                 .command("activity playtime")
                 .build();
         SIGN = new ViewItemBuilder(XMaterial.ENCHANTING_TABLE.parseMaterial())
                 .name("§e§l签到数据")
+                .lore("")
+                .lore("")
+                .lore("")
+                .lore("§f点击查看奖励")
                 .command("activity sign")
                 .build();
-        BAD_REWARDS  = new ViewItemBuilder(XMaterial.ENDER_CHEST.parseMaterial())
+        MONTH = new ViewItemBuilder(XMaterial.ITEM_FRAME.parseMaterial())
+                .name("§e§l切换月份")
+                .lore("§f左右键点击")
+                .command("month")
+                .build();
+        JAN_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l一月数据")
+                .lore("§f暂无数据")
+                .build();
+        FEB_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l二月数据")
+                .lore("§f暂无数据")
+                .build();
+        MAR_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l三月数据")
+                .lore("§f暂无数据")
+                .build();
+        APR_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l四月数据")
+                .lore("§f暂无数据")
+                .build();
+        MAY_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l五月数据")
+                .lore("§f暂无数据")
+                .build();
+        JUN_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l六月数据")
+                .lore("§f暂无数据")
+                .build();
+        JUL_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l七月数据")
+                .lore("§f暂无数据")
+                .build();
+        AUG_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l八月数据")
+                .lore("§f暂无数据")
+                .build();
+        SEP_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l九月数据")
+                .lore("§f暂无数据")
+                .build();
+        OCT_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l十月数据")
+                .lore("§f暂无数据")
+                .build();
+        NOV_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l十一月数据")
+                .lore("§f暂无数据")
+                .build();
+        DEC_DATA = new ViewItemBuilder(XMaterial.BOOKSHELF.parseMaterial())
+                .name("§e§l十二月数据")
+                .lore("§f暂无数据")
+                .build();
+        BAD_REWARDS  = new ViewItemBuilder(XMaterial.POISONOUS_POTATO.parseMaterial())
                 .name("§e§l倒霉奖励")
                 .build();
-        SIGN_REWARDS = new ViewItemBuilder(XMaterial.ENDER_CHEST.parseMaterial())
+        SIGN_REWARDS = new ViewItemBuilder(XMaterial.BAKED_POTATO.parseMaterial())
                 .name("§e§l签到奖励")
                 .build();
-        SERIES_REWARDS = new ViewItemBuilder(XMaterial.ENDER_CHEST.parseMaterial())
+        SERIES_REWARDS = new ViewItemBuilder(XMaterial.GOLDEN_APPLE.parseMaterial())
                 .name("§e§l连续签到奖励")
                 .build();
-        PERFECT_REWARDS = new ViewItemBuilder(XMaterial.ENDER_CHEST.parseMaterial())
+        PERFECT_REWARDS = new ViewItemBuilder(XMaterial.ENCHANTED_GOLDEN_APPLE.parseMaterial())
                 .name("§e§l整月签到奖励")
+                .build();
+        TEN_MINUTES_REWARDS = new ViewItemBuilder(XMaterial.BRICK.parseMaterial())
+                .name("§e§l在线十分钟奖励")
+                .build();
+        ONE_HOURS_REWARDS = new ViewItemBuilder(XMaterial.IRON_INGOT.parseMaterial())
+                .name("§e§l在线一小时奖励")
+                .build();
+        THREE_HOURS_REWARDS = new ViewItemBuilder(XMaterial.GOLD_INGOT.parseMaterial())
+                .name("§e§l在线三小时奖励")
+                .build();
+        SIX_HOURS_REWARDS = new ViewItemBuilder(XMaterial.NETHERITE_INGOT.parseMaterial())
+                .name("§e§l在线六小时奖励")
                 .build();
     }
 
@@ -171,6 +258,37 @@ public class ActivityButton {
                 .flags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
                 .name(miss ? "§f§l[§c§l漏签§f§l]" : "§f§l[§2§l待签§f§l]")
                 .build();
+    }
+
+    public static ItemStack getMonthButton(int month){
+        switch (month){
+            case 1:
+                return JAN_DATA;
+            case 2:
+                return FEB_DATA;
+            case 3:
+                return MAR_DATA;
+            case 4:
+                return APR_DATA;
+            case 5:
+                return MAY_DATA;
+            case 6:
+                return JUN_DATA;
+            case 7:
+                return JUL_DATA;
+            case 8:
+                return AUG_DATA;
+            case 9:
+                return SEP_DATA;
+            case 10:
+                return OCT_DATA;
+            case 11:
+                return NOV_DATA;
+            case 12:
+                return DEC_DATA;
+            default:
+                return BLANK;
+        }
     }
 
 }

@@ -26,6 +26,7 @@ import java.util.Map;
 public class TaskPage implements ViewPage {
 
     private final Map<Integer, ItemStack> itemMap = new HashMap<>();
+    private final Map<Integer, ItemStack> crashMap = new HashMap<>();
 
     private final Inventory inventory;
     private final String target;
@@ -52,7 +53,9 @@ public class TaskPage implements ViewPage {
 
     @Override
     public @NotNull Map<Integer, ItemStack> getItemMap(){
-        Map<Integer, ItemStack> itemStackMap = new HashMap<>(itemMap);
+        crashMap.clear();
+        crashMap.putAll(itemMap);
+
         List<Task> tasks = data.query(Task.class, 0, 44);
         int i = 0, j = 45;
         for (Task task : tasks) {
@@ -63,16 +66,16 @@ public class TaskPage implements ViewPage {
             // 是否永久活动
             long deadline = task.getDeadline();
             if (deadline == 0){
-                itemStackMap.put(j, item);
+                crashMap.put(j, item);
                 j++;
             }else {
                 ItemUtils.addLore(item, String.format("§3§l期限§7: §f%s", TimeUtils.getTime(deadline)));
-                itemStackMap.put(i, item);
+                crashMap.put(i, item);
                 i++;
             }
             ItemUtils.addLore(item, "§7" + task.getDesc());
         }
-        return itemStackMap;
+        return crashMap;
     }
 
     @Override
@@ -82,7 +85,7 @@ public class TaskPage implements ViewPage {
 
     @Override
     public @Nullable ItemStack getItem(int i) {
-        return null;
+        return crashMap.get(i);
     }
 
     @Override

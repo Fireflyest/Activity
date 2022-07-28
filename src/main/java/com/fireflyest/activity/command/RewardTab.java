@@ -1,8 +1,10 @@
 package com.fireflyest.activity.command;
 
+import com.fireflyest.activity.util.YamlUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -23,19 +25,16 @@ public class RewardTab implements TabCompleter {
             List<String> tab = new ArrayList<>();
             if(args.length == 1){
                 for(String sub : list){
-                    if(sub.contains(args[0]))tab.add(sub);
+                    if(sub.startsWith(args[0]))tab.add(sub);
                 }
             }else if(args.length == 2){
                 if("add".equalsIgnoreCase(args[0])){
-                    tab.add("[名称]");
+                    tab.add("[name]");
                 }else if("set".equalsIgnoreCase(args[0])){
-                    tab.add("SignRewards");
-                    tab.add("BadRewards");
-                    tab.add("SeriesRewards");
-                    tab.add("PerfectRewards");
-                    tab.add("TenMinutesRewards");
-                    tab.add("TwoHoursRewards");
-                    tab.add("SixHoursRewards");
+                    ConfigurationSection rewards = YamlUtils.getConfig().getConfigurationSection("Rewards");
+                    if (rewards != null) {
+                        tab.addAll(rewards.getKeys(false));
+                    }
                 }else if("remove".equalsIgnoreCase(args[0])){
                     tab.add("[ID]");
                 }
@@ -43,7 +42,7 @@ public class RewardTab implements TabCompleter {
                 if("set".equalsIgnoreCase(args[0])){
                     tab.add("[id]");
                 }else if("add".equalsIgnoreCase(args[0])){
-                    tab.add("<指令>");
+                    tab.add("<command>");
                 }
             }
             return tab;

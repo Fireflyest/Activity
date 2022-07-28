@@ -6,11 +6,15 @@ import com.fireflyest.activity.bean.Day;
 import com.fireflyest.activity.bean.Reward;
 import com.fireflyest.activity.bean.User;
 import com.fireflyest.activity.core.ActivityManager;
+import com.fireflyest.activity.core.RewardManager;
 import com.fireflyest.activity.data.Config;
 import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.data.Language;
 import com.fireflyest.activity.util.ChatUtils;
+import com.fireflyest.activity.util.ConvertUtils;
 import com.fireflyest.activity.util.TimeUtils;
+import com.fireflyest.activity.view.RewardPage;
+import com.fireflyest.activity.view.RewardView;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,7 +25,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.fireflyest.craftgui.api.ViewGuide;
+import org.fireflyest.craftgui.api.ViewPage;
 import org.fireflyest.craftgui.event.ViewClickEvent;
+import org.fireflyest.craftgui.event.ViewHotbarEvent;
 import org.fireflyest.craftgui.event.ViewPlaceEvent;
 import org.fireflyest.craftgui.util.ItemUtils;
 import org.fireflyest.craftgui.util.SerializeUtil;
@@ -95,13 +101,23 @@ public class PlayerEventListener implements Listener {
         if (value.contains("page")){
             // 不用刷新
             event.setRefresh(false);
-
             if (Config.DEBUG) activity.getLogger().info("action -> " + value);
             player.playSound(player.getLocation(), pageSound, 1F, 1F);
             if (value.contains("pre")){
                 guide.prePage(player);
             }else if (value.contains("next")){
                 guide.nextPage(player);
+            }
+            return;
+        }
+        if (value.equals("month")){
+            // 不用刷新
+            event.setRefresh(false);
+            player.playSound(player.getLocation(), pageSound, 1F, 1F);
+            if (event.isRightClick()){
+                guide.nextPage(player);
+            }else {
+                guide.prePage(player);
             }
             return;
         }
@@ -113,6 +129,17 @@ public class PlayerEventListener implements Listener {
             if (Config.DEBUG) activity.getLogger().info(String.format("remove -> %s", command));
             player.performCommand(command);
             player.playSound(player.getLocation(), removeSound, 1F, 1F);
+            return;
+        }
+
+        if (value.equals("activity playtime")){
+            event.setRefresh(false);
+            if (event.isShiftClick()) {
+                player.performCommand("playtime");
+            }else {
+                player.performCommand(value);
+            }
+            player.playSound(player.getLocation(), clickSound, 1F, 1F);
             return;
         }
 
@@ -139,13 +166,77 @@ public class PlayerEventListener implements Listener {
         String value = ItemUtils.getItemValue(clickItem);
         if("".equals(value))return;
 
-        if ("reward".equals(value)) {
+        if ("addReward".equals(value)) {
             if (!player.hasPermission("activity.admin")) return;
             String name = TranslateUtils.translate(placeItem.getType()) + (placeItem.getAmount() > 1 ? "×"+placeItem.getAmount() : "");
             Reward reward = new Reward(name, "");
             reward.setStack(SerializeUtil.serializeItemStack(placeItem));
             reward.setMeta(SerializeUtil.serializeItemMeta(placeItem));
             data.insert(reward);
+        }
+
+    }
+
+    @EventHandler
+    public void onViewHotbar(ViewHotbarEvent event) {
+        if(!event.getView().getTitle().contains(Language.PLUGIN_NAME)) return;
+        // 获取点击的物品
+        ItemStack item = event.getCurrentItem();
+        // 点击的玩家
+        Player player = (Player)event.getWhoClicked();
+        String playerName = player.getName();
+        // 获取点击数据
+        String value = ItemUtils.getItemValue(item);
+        if("".equals(value))return;
+        // 界面
+        if (guide.unUsed(playerName)) return;
+        ViewPage page = guide.getUsingPage(playerName);
+        if (page instanceof RewardPage){
+            // 权限
+            if (!player.hasPermission("activity.admin")) return;
+            // 是否点奖励
+            // 获取页面
+            RewardPage rewardPage = ((RewardPage) page);
+            String target = rewardPage.getTarget();
+            String rewardsType = "";
+            if (RewardView.SIGN.equals(target)){
+                switch (event.getHotbarButton()+1){
+                    case 1:
+                        rewardsType = RewardManager.BAD;
+                        break;
+                    case 2:
+                        rewardsType = RewardManager.SIGN;
+                        break;
+                    case 3:
+                        rewardsType = RewardManager.SERIES;
+                        break;
+                    case 4:
+                        rewardsType = RewardManager.PERFECT;
+                        break;
+                    default:
+                        return;
+                }
+            } else if (RewardView.PLAYTIME.equals(target)) {
+                switch (event.getHotbarButton()+1){
+                    case 1:
+                        rewardsType = RewardManager.TEN_MINUTE;
+                        break;
+                    case 2:
+                        rewardsType = RewardManager.ONE_HOURS;
+                        break;
+                    case 3:
+                        rewardsType = RewardManager.THREE_HOURS;
+                        break;
+                    case 4:
+                        rewardsType = RewardManager.SIX_HOURS;
+                        break;
+                    default:
+                        return;
+                }
+            }
+            int id = ConvertUtils.parseInt(value.split(" ")[1]);
+            RewardManager.addReward(rewardsType, id);
+            player.sendMessage(Language.TITLE+"奖品§3ID§7: §3" + id + "§f添加到§3" + rewardsType);
         }
 
     }

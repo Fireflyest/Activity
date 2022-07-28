@@ -32,7 +32,7 @@ commands:
     permission: op
 permissions:
   activity.admin:
-    description: 给予补签机会
+    description: 管理员权限
     default: op
   activity.rank:
     description: 查看排行榜

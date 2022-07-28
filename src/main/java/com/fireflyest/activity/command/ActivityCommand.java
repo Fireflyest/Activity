@@ -8,6 +8,7 @@ import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.data.Language;
 import com.fireflyest.activity.util.ConvertUtils;
 import com.fireflyest.activity.util.YamlUtils;
+import com.fireflyest.activity.view.MineView;
 import com.fireflyest.activity.view.RewardView;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,10 +24,13 @@ public class ActivityCommand implements CommandExecutor {
 
     private final Data data;
     private final ViewGuide guide;
+    private final Activity activity;
 
     public ActivityCommand() {
         this.guide = Activity.getGuide();
         this.data = Activity.getData();
+
+        this.activity = Activity.getInstance();
     }
 
     public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String label, String[] args) {
@@ -68,17 +72,24 @@ public class ActivityCommand implements CommandExecutor {
         switch (var1){
             case "reload":
                 if(!sender.isOp())return;
-                sender.sendMessage(Language.RELOADING);
-                YamlUtils.loadConfig();
-                sender.sendMessage(Language.RELOADED);
+                sender.sendMessage(Language.PLUGIN_NAME + Language.RELOADING);
+                activity.setupData();
+                activity.setupGuide();
+                sender.sendMessage(Language.PLUGIN_NAME + Language.RELOADED);
                 break;
             case "rewards":
-                guide.openView(player, Activity.REWARD_VIEW, RewardView.NORMAL);
                 break;
             case "task":
                 guide.openView(player, Activity.TASK_VIEW, playerName);
                 break;
+            case "sign":
+                guide.openView(player, Activity.REWARD_VIEW, RewardView.SIGN);
+                break;
             case "playtime":
+                guide.openView(player, Activity.REWARD_VIEW, RewardView.PLAYTIME);
+                break;
+            case "mine":
+                guide.openView(player, Activity.MINE_VIEW, playerName);
                 break;
             case "close":
                 player.closeInventory();

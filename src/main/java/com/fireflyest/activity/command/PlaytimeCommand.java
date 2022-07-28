@@ -48,16 +48,21 @@ public class PlaytimeCommand implements CommandExecutor {
                     RewardManager.giveReward(player, RewardManager.TEN_MINUTE);
 
                     user.setActivity(user.getActivity() + 1);
-                }else if(ActivityManager.hasTwoHourReward(playerName)){
-                    ActivityManager.ridTwoHourReward(playerName);
-                    RewardManager.giveReward(player, RewardManager.TWO_HOURS);
+                }else if(ActivityManager.hasOneHourReward(playerName)){
+                    ActivityManager.ridOneHourReward(playerName);
+                    RewardManager.giveReward(player, RewardManager.ONE_HOURS);
 
-                    user.setActivity(user.getActivity() + 1);
+                    user.setActivity(user.getActivity() + 2);
+                }else if(ActivityManager.hasThreeHourReward(playerName)){
+                    ActivityManager.ridThreeHourReward(playerName);
+                    RewardManager.giveReward(player, RewardManager.THREE_HOURS);
+
+                    user.setActivity(user.getActivity() + 3);
                 }else if(ActivityManager.hasSixHourReward(playerName)){
                     ActivityManager.ridSixHourReward(playerName);
                     RewardManager.giveReward(player, RewardManager.SIX_HOURS);
 
-                    user.setActivity(user.getActivity() + 2);
+                    user.setActivity(user.getActivity() + 5);
                 }else {
                     sender.sendMessage(Language.NOT_ENOUGH_PLAYTIME);
                 }

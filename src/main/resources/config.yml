@@ -17,16 +17,36 @@ DefaultChance: 2
 # 活跃答题奖励积分
 QuizActivity: 1
 
-# 奖励，随机取一
-# 签到, 1/7的几率是坏奖励
-SignRewards: []
-BadRewards: []
-# 连续签到一星期, 连续签到一个月
-SeriesRewards: []
-PerfectRewards: []
-# 十分钟, 两小时, 六小时
-TenMinutesRewards: []
-TwoHoursRewards: []
-SixHoursRewards: []
-# 抢答
-QuizRewards: []
+Rewards:
+  # 签到, 1/7的几率是坏奖励
+  SignRewards:
+    Message: '§6✦§f今天签到获得了§3%reward%'
+    IDList: []
+  BadRewards:
+    Message: '§6✦§f今天运气真糟糕，签到获得了§3%reward%'
+    IDList: []
+  # 连续签到一星期, 连续签到一个月
+  SeriesRewards:
+    Message: '§6✦§f连续签到一星期，获得了§3%reward%'
+    IDList: []
+  PerfectRewards:
+    Message: '§6✦§f完美！你已连续签到一个月，获得了§3%reward%'
+    IDList: []
+  # 总签到
+  # 十分钟, 一小时，三小时, 六小时
+  TenMinutesRewards:
+    Message: '§6✦§f在线十分钟得到了§3%reward%'
+    IDList: []
+  OneHoursRewards:
+    Message: '§6✦§f连续在线一小时得到了§3%reward%'
+    IDList: []
+  ThreeHoursRewards:
+    Message: '§6✦§f不知不觉已经连续在线三小时，获得了§3%reward%'
+    IDList: []
+  SixHoursRewards:
+    Message: '§6✦§f连续在线六小时得到了§3%reward%§f，应该休息一下吧'
+    IDList: []
+  # 抢答
+  QuizRewards:
+    Message: '§6✦§f回答奖励：§3%reward%'
+    IDList: []
