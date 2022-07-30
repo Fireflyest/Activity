@@ -1,8 +1,10 @@
 package com.fireflyest.activity.core;
 
 import com.cryptomorin.xseries.XSound;
+import com.fireflyest.activity.Activity;
 import com.fireflyest.activity.bean.Reward;
 import com.fireflyest.activity.bean.Rewards;
+import com.fireflyest.activity.data.Config;
 import com.fireflyest.activity.data.Language;
 import com.fireflyest.activity.util.YamlUtils;
 import org.bukkit.Bukkit;
@@ -90,7 +92,8 @@ public class RewardManager {
         }
         // 判断是指令还是物品
         if(reward.getCommand() != null && !"null".equals(reward.getCommand()) && !"".equals(reward.getCommand())){
-            String command = reward.getCommand().replace("%player%", player.getName());
+            String command = reward.getCommand().replace("_", " ").replace("%player%", player.getName());
+            if (Config.DEBUG) Activity.getInstance().getLogger().info(String.format("reward command -> %s", command));
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
         }else {
             player.getInventory().addItem(SerializeUtil.deserialize(reward.getStack(), reward.getMeta()));

@@ -53,16 +53,18 @@ public class SignCommand implements CommandExecutor {
             @Override
             public void run() {
 
-                int dayV = ConvertUtils.parseInt(var1);
+                int dayWantSign = ConvertUtils.parseInt(var1);
                 int today = TimeUtils.getDay();
 
                 // 未到
-                if(dayV > today){
+                if(dayWantSign > today){
                     sender.sendMessage(Language.SIGN_IN_FUTURE);
                     return;
                 }
 
-                Day day = ActivityManager.getDay(playerName, TimeUtils.getMonth(), dayV);
+                // 获取所签日期的数据
+                Day day = ActivityManager.getDay(playerName, TimeUtils.getMonth(), dayWantSign);
+                // 判断是否已签
                 if(day.isSign()){
                     sender.sendMessage(Language.SIGN_IN_ALREADY);
                     return;
@@ -70,22 +72,20 @@ public class SignCommand implements CommandExecutor {
 
                 // 玩家数据
                 User user = ActivityManager.getUser(playerName);
-                if(dayV == today){ // 是否当天
+                if(dayWantSign == today){ // 是否当天
                     // 连续签到
                     long now = TimeUtils.getDate();
                     if(now - user.getLastSign() < 1000*60*60*48){
                         user.setSeries(user.getSeries() + 1);
                         // 每连续签到7天有奖励
-                        if(user.getSeries()%7 == 0){
-                            RewardManager.giveReward(player, RewardManager.SERIES);
-                        }
+                        if(user.getSeries()%7 == 0) RewardManager.giveReward(player, RewardManager.SERIES);
                     }else {
                         user.setSeries(1);
                     }
                     user.setLastSign(now);
 
                     // 判断是否全勤
-                    if(dayV == TimeUtils.getMaxDay() && user.getSeries() >= TimeUtils.getMaxDay()){
+                    if(dayWantSign == TimeUtils.getMaxDay() && user.getSeries() >= TimeUtils.getMaxDay()){
                         RewardManager.giveReward(player, RewardManager.PERFECT);
                     }
                 }else {  // 补签
@@ -95,28 +95,24 @@ public class SignCommand implements CommandExecutor {
                     }
                     user.setChance(user.getChance() - 1);
                 }
+                // 天数据
+                day.setSign(true);
+                data.update(day);
 
                 // 签到总数
                 user.setSigned(user.getSigned() + 1);
                 user.setActivity(user.getActivity() + 1);
                 data.update(user);
-
+                // 签到成功
                 sender.sendMessage(Language.SIGN_IN_SUCCESS);
-                // 天数据
-                day.setSign(true);
-                data.update(day);
+
                 // 奖励
                 RewardManager.giveReward(player, RewardManager.SIGN);
-            }
-        }.runTask(Activity.getInstance());
 
-        new BukkitRunnable(){
-            @Override
-            public void run() {
                 // 刷新页面
                 guide.refreshPage(playerName);
             }
-        }.runTaskLater(Activity.getInstance(), 2);
+        }.runTask(Activity.getInstance());
     }
 
 }

@@ -10,7 +10,6 @@ import com.fireflyest.activity.data.Storage;
 import com.fireflyest.activity.util.MysqlExecuteUtils;
 import com.fireflyest.activity.util.SqliteExecuteUtils;
 import com.fireflyest.activity.util.TimeUtils;
-import org.fireflyest.craftgui.api.ViewGuide;
 
 import java.util.*;
 
@@ -29,7 +28,7 @@ public class ActivityManager {
     private static final List<String> sixHourReward = new ArrayList<>();
     private static final Map<String, Long> lastOnline = new HashMap<>();
 
-    private static ViewGuide guide;
+//    private static ViewGuide guide;
     private static Data data;
     private static Storage storage;
 
@@ -37,7 +36,7 @@ public class ActivityManager {
     }
 
     public static void initActivityManager(){
-        guide = Activity.getGuide();
+//        guide = Activity.getGuide();
         data = Activity.getData();
         storage = Activity.getStorage();
 
@@ -95,7 +94,8 @@ public class ActivityManager {
     }
 
     public static long getOnlineTime(String playerName){
-        return TimeUtils.getDate() - joinTime.get(playerName);
+        if (joinTime.containsKey(playerName)) return TimeUtils.getDate() - joinTime.get(playerName);
+        return 0;
     }
 
     public static long getTodayOnlineTime(String playerName){

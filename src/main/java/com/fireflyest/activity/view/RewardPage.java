@@ -214,7 +214,8 @@ public class RewardPage implements ViewPage {
         StringBuilder line = new StringBuilder("§f");
         int i = 0; // 列
         for (Reward reward : rewardSet) {
-            line.append(String.format("%-8s", reward.getName()));
+            if (reward == null) continue;
+            line.append(String.format(" §7• §f%-6s", reward.getName()));
             i++;
             if (i%3 == 0) {
                 i = 0;
