@@ -9,6 +9,7 @@ import com.fireflyest.activity.data.Data;
 import com.fireflyest.activity.data.Language;
 import com.fireflyest.activity.util.ConvertUtils;
 import com.fireflyest.activity.util.TimeUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,6 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.fireflyest.craftgui.api.ViewGuide;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
 
 public class SignCommand implements CommandExecutor {
 
@@ -59,6 +62,8 @@ public class SignCommand implements CommandExecutor {
                 // 未到
                 if(dayWantSign > today){
                     sender.sendMessage(Language.SIGN_IN_FUTURE);
+                    // 刷新页面
+                    guide.refreshPage(playerName);
                     return;
                 }
 
@@ -67,22 +72,25 @@ public class SignCommand implements CommandExecutor {
                 // 判断是否已签
                 if(day.isSign()){
                     sender.sendMessage(Language.SIGN_IN_ALREADY);
+                    // 刷新页面
+                    guide.refreshPage(playerName);
                     return;
                 }
 
                 // 玩家数据
                 User user = ActivityManager.getUser(playerName);
                 if(dayWantSign == today){ // 是否当天
-                    // 连续签到
-                    long now = TimeUtils.getDate();
-                    if(now - user.getLastSign() < 1000*60*60*48){
+                    // 判断昨天是否签到
+                    Date lastSignAddOne = DateUtils.addDays(new Date(user.getLastSign()), 1);
+                    if (DateUtils.isSameDay(lastSignAddOne, TimeUtils.getDate())){
                         user.setSeries(user.getSeries() + 1);
                         // 每连续签到7天有奖励
                         if(user.getSeries()%7 == 0) RewardManager.giveReward(player, RewardManager.SERIES);
                     }else {
                         user.setSeries(1);
                     }
-                    user.setLastSign(now);
+                    // 设置最后签到时间
+                    user.setLastSign(TimeUtils.getTime());
 
                     // 判断是否全勤
                     if(dayWantSign == TimeUtils.getMaxDay() && user.getSeries() >= TimeUtils.getMaxDay()){

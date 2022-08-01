@@ -45,7 +45,7 @@ public class ChatUtils {
     public static void sendCommandButton(Player player, String display, String hover, String command) {
         player.spigot().sendMessage(new ComponentBuilder(LEFT)
                 .append(display)
-                .color(ChatColor.YELLOW)
+                .color(ChatColor.GREEN)
                 .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
                 .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()))
                 .append(RIGHT)

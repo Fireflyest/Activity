@@ -65,7 +65,7 @@ public class PlayerEventListener implements Listener {
                 User user = ActivityManager.getUser(playerName);
                 // 新用户新建数据存储
                 if (user == null) {
-                    user = new User(playerName, player.getUniqueId().toString(),  TimeUtils.getDate());
+                    user = new User(playerName, player.getUniqueId().toString(),  TimeUtils.getTime());
                     ActivityManager.addUser(user);
                 }
                 // 过月份给予补签机会

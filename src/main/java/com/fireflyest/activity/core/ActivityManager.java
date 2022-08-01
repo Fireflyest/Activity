@@ -72,9 +72,9 @@ public class ActivityManager {
 
     public static void playerJoin(String name){
        // 判断五分钟内是否在线
-        if (lastOnline.containsKey(name) && (TimeUtils.getDate() - lastOnline.get(name))/(1000*60) <5) return;
+        if (lastOnline.containsKey(name) && (TimeUtils.getTime() - lastOnline.get(name))/(1000*60) <5) return;
         // 重置在线时间
-        joinTime.put(name, TimeUtils.getDate());
+        joinTime.put(name, TimeUtils.getTime());
         // 重置在线奖励
         tenMinuteReward.remove(name);
         oneHourReward.remove(name);
@@ -90,17 +90,17 @@ public class ActivityManager {
         data.update(user);
         data.update(day);
         // 最后在线
-        lastOnline.put(playerName, TimeUtils.getDate());
+        lastOnline.put(playerName, TimeUtils.getTime());
     }
 
     public static long getOnlineTime(String playerName){
-        if (joinTime.containsKey(playerName)) return TimeUtils.getDate() - joinTime.get(playerName);
+        if (joinTime.containsKey(playerName)) return TimeUtils.getTime() - joinTime.get(playerName);
         return 0;
     }
 
     public static long getTodayOnlineTime(String playerName){
         Day day = getDay(playerName);
-        return day.getPlaytime() + TimeUtils.getDate() - joinTime.get(playerName);
+        return day.getPlaytime() + TimeUtils.getTime() - joinTime.get(playerName);
     }
 
     public static Reward getReward(int id){

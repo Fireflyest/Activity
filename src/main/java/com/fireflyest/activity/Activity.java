@@ -195,7 +195,7 @@ public class Activity extends JavaPlugin {
     public void setupGuide() {
         RegisteredServiceProvider<ViewGuide> rsp = Bukkit.getServer().getServicesManager().getRegistration(ViewGuide.class);
         if (rsp == null) {
-            Bukkit.getLogger().warning("Gui not found!");
+            this.getLogger().warning("GUI not found!");
             return;
         }
         guide = rsp.getProvider();

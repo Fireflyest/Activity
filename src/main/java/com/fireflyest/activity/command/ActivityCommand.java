@@ -18,6 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.fireflyest.craftgui.api.ViewGuide;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ActivityCommand implements CommandExecutor {
@@ -114,6 +115,7 @@ public class ActivityCommand implements CommandExecutor {
                             if(u1.getActivity() == u2.getActivity()) return 0;
                             return u1.getActivity() > u2.getActivity() ? 1 : -1;
                         });
+                        Collections.reverse(ranks);
                         sender.sendMessage(Language.ACTIVITY_RANK);
                         int i = 1;
                         for (User rank : ranks) {

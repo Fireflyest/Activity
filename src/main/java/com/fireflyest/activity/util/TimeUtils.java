@@ -100,10 +100,13 @@ public class TimeUtils {
      * 获取当前时间数据
      * @return long
      */
-    public static long getDate(){
+    public static long getTime(){
         return Calendar.getInstance(Locale.CHINA).getTime().getTime();
     }
 
+    public static Date getDate(){
+        return Calendar.getInstance(Locale.CHINA).getTime();
+    }
 
     /**
      * 该月最多有多少天

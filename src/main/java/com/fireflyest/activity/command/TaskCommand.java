@@ -116,7 +116,7 @@ public class TaskCommand implements CommandExecutor {
                         if (item.getType() == Material.AIR) {
                             item = new ItemStack(Material.BOOK);
                         }
-                        long deadline = var3 == null ? 0 : ((long) ConvertUtils.parseInt(var3) *1000*60*60) + TimeUtils.getDate();
+                        long deadline = var3 == null ? 0 : ((long) ConvertUtils.parseInt(var3) *1000*60*60) + TimeUtils.getTime();
                         Task task = new Task(var2, deadline);
                         task.setStack(SerializeUtil.serializeItemStack(item));
                         task.setMeta(SerializeUtil.serializeItemMeta(item));
