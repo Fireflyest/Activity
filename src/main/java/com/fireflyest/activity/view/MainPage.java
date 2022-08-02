@@ -152,8 +152,10 @@ public class MainPage implements ViewPage {
         ItemUtils.setLore(playtime, String.format("§3§l总在线§7: §f%s", TimeUtils.convertTime(user.getPlaytime()+ActivityManager.getOnlineTime(target))), 2);
         if(ActivityManager.hasTenMinuteReward(target)) {
             ItemUtils.setLore(playtime, "§fShift+点击领取在线十分钟奖励", 3);
+        }else if(ActivityManager.hasOneHourReward(target)) {
+            ItemUtils.setLore(playtime, "§fShift+点击领取在线一小时奖励", 3);
         }else if(ActivityManager.hasThreeHourReward(target)) {
-            ItemUtils.setLore(playtime, "§fShift+点击领取在线两小时奖励", 3);
+            ItemUtils.setLore(playtime, "§fShift+点击领取在线三小时奖励", 3);
         }else if(ActivityManager.hasSixHourReward(target)) {
             ItemUtils.setLore(playtime, "§fShift+点击领取在线六小时奖励", 3);
         }

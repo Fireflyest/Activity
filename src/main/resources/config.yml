@@ -8,9 +8,6 @@ Url: 'jdbc:mysql://localhost:3306/mc_market?useSSL=false&serverTimezone=UTC'
 User: 'root'
 Password: '123456'
 
-# 是否展示菜单中玩家头颅的皮肤
-DisplayItemNumber: false
-
 # 默认的补签次数，每个月会送的数量
 DefaultChance: 2
 
