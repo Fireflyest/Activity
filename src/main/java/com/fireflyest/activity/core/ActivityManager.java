@@ -65,7 +65,8 @@ public class ActivityManager {
         Day aDay = storage.inquiry(sql, Day.class);
         if (aDay == null) {
             aDay = new Day(playerName, month, day);
-            data.insert(aDay);
+            int id = data.insert(aDay);
+            aDay.setId(id);
         }
         return aDay;
     }

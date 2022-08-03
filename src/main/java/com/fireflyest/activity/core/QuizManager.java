@@ -63,10 +63,10 @@ public class QuizManager {
         Bukkit.broadcastMessage(Language.TITLE + quiz.getTitle());
         // 发布选项
         for(Player player : Bukkit.getOnlinePlayers()){
-            char prefix = 'A';
-            for(String option : quiz.getOptions()){
-                ChatUtils.sendQuizOption(player, prefix, option);
-                prefix++;
+            char option = 'A';
+            for(String optionText : quiz.getOptions()){
+                ChatUtils.sendQuizOption(player, option, optionText);
+                option++;
             }
         }
     }
